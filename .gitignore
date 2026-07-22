@@ -1,8 +1,30 @@
+# Dependency directories
 node_modules/
-build/
+
+# Build output
 dist/
+build/
+
+# Test coverage
 coverage/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Logs
 *.log
-.env*
-!.env.example
+npm-debug.log*
+
+# Environment files (keep .env.example as reference)
+.env
+.env.local
+.env.production
+
+# IDE / Editor specific
+.vscode/
+.idea/
+
+# AI Studio / Antigravity agent files
+.antigravity/
+metadata.json

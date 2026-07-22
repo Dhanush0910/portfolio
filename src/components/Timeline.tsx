@@ -27,14 +27,14 @@ const education = [
     institution: "Prathyusha Engineering College",
     degree: "B.E., Computer Science and Engineering",
     detail: "CGPA: 8.2",
-    tags: ["Computer Science", "Engineering", "Full-Stack Dev", "SDLC"],
+    tags: ["Computer Science", "Engineering"],
   },
   {
     year: "Jun 2019 — May 2021",
     institution: "Shree Niketan Higher Secondary School",
     degree: "Higher Secondary Certificate",
     detail: "Percentage: 89%",
-    tags: ["Mathematics", "Computer Science", "Physics"],
+    tags: ["Mathematics", "Biology", "Physics"],
   },
 ];
 
@@ -53,7 +53,7 @@ const accomplishments = [
 
 const certifications = [
   { name: "Certified Software Developer – Python (Associate Level)", issuer: "IOPPC", date: "Mar 2025" },
-  { name: "Full-Stack Web Development", issuer: "Coursera", date: "Jan 2025" },
+  { name: "The Full-Stack", issuer: "Coursera", date: "Jan 2025" },
   { name: "AWS Academy Cloud Foundations", issuer: "AWS", date: "Sep 2024" },
   { name: "JavaScript & React.js Essential Training", issuer: "LinkedIn Learning", date: "May 2024" },
 ];

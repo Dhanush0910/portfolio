@@ -91,7 +91,7 @@ export default function SectionScroller({
       // Let inner scrollable containers consume the event first
       if (isScrollableChild(e.target as HTMLElement, e.deltaY)) return;
 
-      if (Math.abs(e.deltaY) > 15) {
+      if (Math.abs(e.deltaY) > 50) {
         e.preventDefault();
         const nextIndex = e.deltaY > 0 ? activeIndex + 1 : activeIndex - 1;
         if (nextIndex >= 0 && nextIndex < sections.length) {
@@ -102,7 +102,7 @@ export default function SectionScroller({
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         wheelLockRef.current = false;
-      }, 150);
+      }, 800);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
