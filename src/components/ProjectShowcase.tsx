@@ -125,29 +125,21 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
         </div>
       </div>
 
-      {/* ── STICKY CARD STACK CONTAINER ──
-          `pb-[70vh]` gives the parent container enough bottom height so Card 3
-          pins on top of Card 2 & Card 1, holds the 3-card stack pinned on screen,
-          and then all 3 cards scroll up together as normal scroll continues.
-      ── */}
-      <div className="relative max-w-4xl mx-auto pb-[70vh]">
+      {/* ── Card List (flat, scrolls naturally inside section) ── */}
+      <div className="relative max-w-4xl mx-auto flex flex-col gap-8">
         {filteredProjects.map((project, index) => (
           <motion.div
             key={project.id}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="sticky w-full origin-top mb-[40vh] last:mb-0"
-            style={{
-              top: `${100 + index * 28}px`,
-              zIndex: (index + 1) * 10,
-            }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.35, delay: index * 0.08 }}
+            className="w-full"
           >
-            {/* ─ Outer Card Container with glassmorphism & shadow depth ─ */}
+            {/* ─ Outer Card Container ─ */}
             <div
               onClick={() => setActiveProject(project)}
-              className="group relative rounded-3xl border p-6 sm:p-8 cursor-pointer flex flex-col md:flex-row gap-6 items-stretch shadow-2xl transition-all duration-500 overflow-hidden backdrop-blur-xl"
+              className="group relative rounded-3xl border p-6 sm:p-8 cursor-pointer flex flex-col md:flex-row gap-6 items-stretch shadow-2xl transition-all duration-500 overflow-hidden backdrop-blur-xl hover:scale-[1.01]"
               style={{
                 backgroundColor: dm
                   ? "rgba(4,25,18,0.96)"

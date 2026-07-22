@@ -34,8 +34,6 @@ export default function Header({ activeSection, setActiveSection, isDarkMode, on
   const handleScrollTo = (id: string) => {
     setActiveSection(id);
     setMobileMenuOpen(false);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (

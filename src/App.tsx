@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Cpu, ShieldCheck, Terminal as TerminalIcon } from "lucide-react";
 
 // Components
@@ -13,6 +13,7 @@ import Timeline from "./components/Timeline";
 import ProjectShowcase from "./components/ProjectShowcase";
 import Terminal from "./components/Terminal";
 import ContactCard from "./components/ContactCard";
+import SectionScroller, { SectionItem } from "./components/SectionScroller";
 
 // ── Emerald palette constants ──
 const E = {
@@ -27,8 +28,6 @@ export default function App() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
-
-  const heroRef = useRef<HTMLElement>(null);
 
   /* ─── Preloader ─── */
   useEffect(() => {
@@ -47,33 +46,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  /* ─── Active section tracking ─── */
-  useEffect(() => {
-    const onScroll = () => {
-      const sections = ["hero", "about", "timeline", "projects", "terminal", "contact"];
-      const sp = window.scrollY + window.innerHeight / 3;
-      for (const s of sections) {
-        const el = document.getElementById(s);
-        if (el) {
-          const { offsetTop: top, offsetHeight: h } = el;
-          if (sp >= top && sp < top + h) { setActiveSection(s); break; }
-        }
-      }
-    };
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  /* ─── Scroll transforms ─── */
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 600], [0, -70]);
-  const heroOpacity = useTransform(scrollY, [0, 380], [1, 0]);
-  const ferroOpacity = useTransform(
-    scrollY,
-    [0, typeof window !== "undefined" ? window.innerHeight * 0.75 : 700],
-    [isDarkMode ? 0.45 : 0.70, 0]
-  );
-
   /* ─── Hero headline ─── */
   const line1 = "Hey, I'm Dhanush";
   const line2 = "Full-Stack Developer.";
@@ -89,20 +61,295 @@ export default function App() {
   /* ─── Theme helpers ─── */
   const dm = isDarkMode;
   const bg = dm ? "#020D0A" : "#F8E7C9";
-  const textMain = dm ? "text-white" : "text-[#0D1F17]";
   const textMid = dm ? "text-white/50" : "text-[#0D1F17]/55";
   const textDim = dm ? "text-white/38" : "text-[#0D1F17]/45";
 
+  // Ferrofluid canvas opacity calculation
+  const ferroOpacity = activeSection === "hero" ? (dm ? 0.45 : 0.70) : 0;
+
+  /* ─── Sections definition for Motion Blur SectionScroller ─── */
+  const sections: SectionItem[] = [
+    {
+      id: "hero",
+      label: "Core",
+      content: (
+        <div className="relative min-h-screen w-full flex flex-col items-center justify-center px-4 overflow-hidden">
+          <div className="max-w-3xl mx-auto text-center space-y-7 relative z-20 flex flex-col items-center pb-12" style={{ paddingTop: "96px" }}>
+            {/* ── Badge pills ── */}
+            <motion.div
+              className="flex items-center gap-2 flex-wrap justify-center"
+              initial={{ opacity: 0, y: -10 }}
+              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, delay: 1.35, ease: "easeOut" }}
+            >
+              <span
+                className="text-[11px] font-semibold px-3 py-1 rounded-full text-white"
+                style={{
+                  background: `#064E3B`,
+                  boxShadow: `0 0 12px rgba(6,78,59,0.35)`,
+                }}
+              >
+                Open to Work
+              </span>
+              <span
+                className="text-[11px] font-mono px-2.5 py-1 rounded-full border"
+                style={{
+                  borderColor: dm ? "rgba(255,255,255,0.09)" : "rgba(6,78,59,0.18)",
+                  color: dm ? "rgba(255,255,255,0.45)" : "rgba(6,78,59,0.65)",
+                  background: dm ? "rgba(255,255,255,0.025)" : "rgba(6,78,59,0.05)",
+                }}
+              >
+                Full-Stack Developer
+              </span>
+            </motion.div>
+
+            {/* ── Hero headline: letter-by-letter staggered reveal ── */}
+            <div className="space-y-0.5 text-center">
+              {[line1, line2].map((line, lineIdx) => {
+                const prevLength = [line1, line2].slice(0, lineIdx).join("").length;
+                const baseDelay = [1.5, 1.8][lineIdx];
+                const charDelay = [0.028, 0.022][lineIdx];
+                return (
+                  <div key={lineIdx} className="overflow-hidden py-1">
+                    <div
+                      className="flex flex-wrap justify-center gap-x-[0.25em] text-4xl sm:text-5xl md:text-[62px] lg:text-[72px] font-display font-bold tracking-tight leading-[1.06]"
+                      style={{ color: dm ? "#ffffff" : "#0D1F17" }}
+                    >
+                      {line.split(" ").map((word, wIdx) => (
+                        <span key={`${lineIdx}-w-${wIdx}`} className="inline-block whitespace-nowrap">
+                          {word.split("").map((char, charIdx) => {
+                            const prevChars = line.split(" ").slice(0, wIdx).join(" ").length + (wIdx > 0 ? 1 : 0);
+                            const i = prevChars + charIdx;
+                            return (
+                              <motion.span
+                                key={`${lineIdx}-c-${charIdx}`}
+                                className="inline-block"
+                                initial={{ y: "110%", opacity: 0 }}
+                                animate={isLoaded ? { y: 0, opacity: 1 } : {}}
+                                transition={{
+                                  duration: 0.72,
+                                  delay: baseDelay + (prevLength + i) * charDelay,
+                                  ease: [0.16, 1, 0.3, 1],
+                                }}
+                              >
+                                {char}
+                              </motion.span>
+                            );
+                          })}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* ── Subheading ── */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 2.5, ease: "easeOut" }}
+              className={`text-[14px] sm:text-[15px] font-light max-w-md mx-auto leading-relaxed tracking-wide ${textDim}`}
+            >
+              Building AI-powered applications and full-stack web systems with Python, React.js, Flask,
+              and Node.js — from REST APIs to intelligent automation workflows.
+            </motion.p>
+
+            {/* ── CTA Button ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.65, delay: 2.75 }}
+              className="flex items-center justify-center pt-1"
+            >
+              <motion.button
+                onClick={() => setActiveSection("terminal")}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-tight cursor-pointer border backdrop-blur-sm shadow-lg"
+                style={{
+                  color: dm ? "rgba(255,255,255,0.92)" : "#0D1F17",
+                  borderColor: dm ? "rgba(255,255,255,0.2)" : "rgba(6,78,59,0.3)",
+                  background: dm ? "rgba(6,78,59,0.25)" : "rgba(6,78,59,0.1)",
+                }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <TerminalIcon className="w-3.5 h-3.5" style={{ color: "#10B981" }} />
+                Open Shell
+              </motion.button>
+            </motion.div>
+
+            {/* ── Orbital Sphere ── */}
+            <motion.div
+              className="pt-5 pb-2"
+              initial={{ opacity: 0, scale: 0.75 }}
+              animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 1.0, delay: 3.0, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <OrbitalCore isLoaded={isLoaded} isDarkMode={dm} />
+            </motion.div>
+
+            {/* ── Scroll hint ── */}
+            <motion.div
+              animate={{ y: [0, 7, 0] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              className="cursor-pointer opacity-25 hover:opacity-55 transition-opacity"
+              onClick={() => setActiveSection("about")}
+            >
+              <ChevronDown className={`w-5 h-5 ${textMid}`} />
+            </motion.div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "about",
+      label: "About",
+      content: (
+        <div className="w-full max-w-7xl mx-auto px-4 flex flex-col min-h-full" style={{ paddingTop: "80px" }}>
+          <div className="overflow-y-auto flex-1 pr-1" style={{ maxHeight: "calc(100vh - 90px)" }}>
+            <div className="py-8">
+              <AboutSection isDarkMode={dm} />
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "timeline",
+      label: "Experience",
+      content: (
+        <div className="w-full max-w-4xl mx-auto px-4 flex flex-col min-h-full" style={{ paddingTop: "80px" }}>
+          <div className="overflow-y-auto flex-1 pr-1" style={{ maxHeight: "calc(100vh - 90px)" }}>
+            <div className="py-8">
+              <Timeline isDarkMode={dm} />
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "projects",
+      label: "Projects",
+      content: (
+        <div className="w-full max-w-7xl mx-auto px-4 py-4 flex flex-col min-h-full" style={{ paddingTop: "80px" }}>
+          <div className="overflow-y-auto flex-1 pr-1" style={{ maxHeight: "calc(100vh - 100px)" }}>
+            <div className="pb-8">
+              <ProjectShowcase isDarkMode={dm} />
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "terminal",
+      label: "Console",
+      content: (
+        <div className="w-full max-w-7xl mx-auto px-4 py-12 flex items-center justify-center min-h-screen">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full">
+            <div className="lg:col-span-5 space-y-5 text-center lg:text-left">
+              <span
+                className="text-[10px] font-mono tracking-widest font-bold uppercase block"
+                style={{ color: "#064E3B" }}
+              >
+                INTERACTIVE DEVELOPER SHELL
+              </span>
+              <h2
+                className="text-3xl md:text-4xl font-display font-extrabold tracking-tight"
+                style={{ color: dm ? "#ffffff" : "#0D1F17" }}
+              >
+                Developer{" "}
+                <span
+                  className="italic font-serif font-normal text-transparent bg-clip-text"
+                  style={{ backgroundImage: `linear-gradient(to right, ${E.glow}, ${E.mid})` }}
+                >
+                  Console
+                </span>
+              </h2>
+              <p className={`text-sm leading-relaxed ${textDim}`}>
+                Navigate my technical history, project documentation, and professional certifications directly through my custom CLI. Type <strong>help</strong> to view commands.
+              </p>
+              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+                <div className="flex items-center gap-2">
+                  <Cpu className="w-4 h-4" style={{ color: E.bright }} />
+                  <span className={`text-xs font-semibold ${textMid}`}>Skills & Stack</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4" style={{ color: E.bright }} />
+                  <span className={`text-xs font-semibold ${textMid}`}>Live Contact Info</span>
+                </div>
+              </div>
+            </div>
+            <div className="lg:col-span-7">
+              <Terminal isDarkMode={dm} />
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "contact",
+      label: "Contact",
+      content: (
+        <div className="w-full max-w-4xl mx-auto px-4 py-12 flex flex-col items-center justify-between min-h-screen pt-24">
+          <div className="w-full my-auto">
+            <ContactCard isDarkMode={dm} />
+          </div>
+          <footer
+            className="w-full mb-6 py-6 px-4 rounded-2xl backdrop-blur-sm"
+            style={{
+              borderTop: `1px solid ${dm ? "rgba(255,255,255,0.04)" : "rgba(6,78,59,0.12)"}`,
+              background: dm ? "rgba(0,0,0,0.25)" : "rgba(248,231,201,0.60)",
+            }}
+          >
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2.5">
+                <div className="relative w-5 h-5">
+                  <div
+                    className="absolute w-4 h-4 rounded-full"
+                    style={{ background: E.ink, boxShadow: `0 0 8px rgba(16,185,129,0.40)` }}
+                  />
+                  <div
+                    className="absolute w-4 h-4 rounded-full translate-x-[5px]"
+                    style={{ background: dm ? "rgba(82,82,82,0.70)" : "rgba(180,155,120,0.60)" }}
+                  />
+                </div>
+                <span
+                  className="text-xs font-display font-bold tracking-widest uppercase ml-2"
+                  style={{ color: dm ? "rgba(255,255,255,0.25)" : "rgba(13,31,23,0.35)" }}
+                >
+                  DHANUSH
+                </span>
+              </div>
+              <div className="text-center sm:text-right">
+                <p
+                  className="text-[10px] font-mono uppercase tracking-widest font-bold"
+                  style={{ color: dm ? "rgba(255,255,255,0.18)" : "rgba(13,31,23,0.28)" }}
+                >
+                  © 2026 DHANUSH CODES. ALL RIGHTS RESERVED.
+                </p>
+                <p
+                  className="text-[9px] font-mono mt-1 uppercase tracking-wider"
+                  style={{ color: dm ? "rgba(255,255,255,0.10)" : "rgba(13,31,23,0.18)" }}
+                >
+                  CRAFTED WITH REACT, TAILWIND CSS &amp; MOTION
+                </p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div
-      className="min-h-screen relative font-sans overflow-x-clip"
+      className="h-screen w-screen relative font-sans overflow-hidden"
       style={{
         background: bg,
         color: dm ? "#fff" : "#0D1F17",
         transition: "background 0.55s cubic-bezier(0.4,0,0.2,1), color 0.55s",
       }}
     >
-
       {/* ══════════════════════════════════════════════════════ */}
       {/*  PRELOADER                                            */}
       {/* ══════════════════════════════════════════════════════ */}
@@ -117,10 +364,12 @@ export default function App() {
             <div
               className="absolute pointer-events-none"
               style={{
-                width: 380, height: 380,
+                width: 380,
+                height: 380,
                 background: `radial-gradient(circle, rgba(6,78,59,0.18) 0%, transparent 70%)`,
                 filter: "blur(55px)",
-                top: "50%", left: "50%",
+                top: "50%",
+                left: "50%",
                 transform: "translate(-50%,-50%)",
               }}
             />
@@ -140,10 +389,13 @@ export default function App() {
                 style={{ color: dm ? "rgba(255,255,255,0.90)" : "#0D1F17" }}
               >
                 {loadingProgress.toString().padStart(2, "0")}
-                <span className="text-5xl" style={{ color: "rgba(16,185,129,0.65)" }}>%</span>
+                <span className="text-5xl" style={{ color: "rgba(16,185,129,0.65)" }}>
+                  %
+                </span>
               </div>
 
-              <div className="w-44 h-[1px] mx-auto relative overflow-hidden rounded-full"
+              <div
+                className="w-44 h-[1px] mx-auto relative overflow-hidden rounded-full"
                 style={{ background: dm ? "rgba(255,255,255,0.04)" : "rgba(6,78,59,0.12)" }}
               >
                 <motion.div
@@ -156,7 +408,8 @@ export default function App() {
                 />
               </div>
 
-              <p className="text-[9px] font-mono tracking-[0.2em] uppercase h-4"
+              <p
+                className="text-[9px] font-mono tracking-[0.2em] uppercase h-4"
                 style={{ color: dm ? "rgba(255,255,255,0.20)" : "rgba(6,78,59,0.45)" }}
               >
                 {getStatus(loadingProgress)}
@@ -167,11 +420,11 @@ export default function App() {
       </AnimatePresence>
 
       {/* ══════════════════════════════════════════════════════ */}
-      {/*  FERROFLUID — hero only, fades on scroll             */}
+      {/*  FERROFLUID — hero only, fades when navigating away  */}
       {/* ══════════════════════════════════════════════════════ */}
       {isLoaded && (
         <motion.div
-          className="fixed inset-0 z-[1] pointer-events-auto"
+          className="fixed inset-0 z-[1] pointer-events-auto transition-opacity duration-700"
           style={{
             opacity: ferroOpacity,
             mixBlendMode: dm ? "screen" : "darken",
@@ -219,253 +472,17 @@ export default function App() {
       />
 
       {/* ══════════════════════════════════════════════════════ */}
-      {/*  HERO SECTION                                         */}
+      {/*  FULL-PAGE SECTION SCROLLER WITH MOTION BLUR         */}
       {/* ══════════════════════════════════════════════════════ */}
-      <motion.section
-        id="hero"
-        ref={heroRef}
-        className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden"
-        style={{ y: heroY, opacity: heroOpacity }}
-      >
-        <div className="max-w-3xl mx-auto text-center space-y-7 relative z-20 flex flex-col items-center pt-28 sm:pt-32 pb-12">
-
-          {/* ── Badge pills ── */}
-          <motion.div
-            className="flex items-center gap-2 flex-wrap justify-center"
-            initial={{ opacity: 0, y: -10 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: 1.35, ease: "easeOut" }}
-          >
-            <span
-              className="text-[11px] font-semibold px-3 py-1 rounded-full text-white"
-              style={{
-                background: `#064E3B`,
-                boxShadow: `0 0 12px rgba(6,78,59,0.35)`,
-              }}
-            >
-              Open to Work
-            </span>
-            <span
-              className="text-[11px] font-mono px-2.5 py-1 rounded-full border"
-              style={{
-                borderColor: dm ? "rgba(255,255,255,0.09)" : "rgba(6,78,59,0.18)",
-                color: dm ? "rgba(255,255,255,0.45)" : "rgba(6,78,59,0.65)",
-                background: dm ? "rgba(255,255,255,0.025)" : "rgba(6,78,59,0.05)",
-              }}
-            >
-              Full-Stack Developer
-            </span>
-          </motion.div>
-
-          {/* ── Hero headline: letter-by-letter staggered reveal ── */}
-          <div className="space-y-0.5 text-center">
-            {[line1, line2].map((line, lineIdx) => {
-              const prevLength = [line1, line2].slice(0, lineIdx).join("").length;
-              const baseDelay = [1.5, 1.8][lineIdx];
-              const charDelay = [0.028, 0.022][lineIdx];
-              return (
-                <div key={lineIdx} className="overflow-hidden py-1">
-                  <div
-                    className="flex flex-wrap justify-center gap-x-[0.25em] text-4xl sm:text-5xl md:text-[62px] lg:text-[72px] font-display font-bold tracking-tight leading-[1.06]"
-                    style={{ color: dm ? "#ffffff" : "#0D1F17" }}
-                  >
-                    {line.split(" ").map((word, wIdx) => (
-                      <span key={`${lineIdx}-w-${wIdx}`} className="inline-block whitespace-nowrap">
-                        {word.split("").map((char, charIdx) => {
-                          const prevChars = line.split(" ").slice(0, wIdx).join(" ").length + (wIdx > 0 ? 1 : 0);
-                          const i = prevChars + charIdx;
-                          return (
-                            <motion.span
-                              key={`${lineIdx}-c-${charIdx}`}
-                              className="inline-block"
-                              initial={{ y: "110%", opacity: 0 }}
-                              animate={isLoaded ? { y: 0, opacity: 1 } : {}}
-                              transition={{
-                                duration: 0.72,
-                                delay: baseDelay + (prevLength + i) * charDelay,
-                                ease: [0.16, 1, 0.3, 1],
-                              }}
-                            >
-                              {char}
-                            </motion.span>
-                          );
-                        })}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* ── Subheading ── */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 2.5, ease: "easeOut" }}
-            className={`text-[14px] sm:text-[15px] font-light max-w-md mx-auto leading-relaxed tracking-wide ${textDim}`}
-          >
-            Building AI-powered applications and full-stack web systems with Python, React.js, Flask,
-            and Node.js — from REST APIs to intelligent automation workflows.
-          </motion.p>
-
-          {/* ── CTA Button ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.65, delay: 2.75 }}
-            className="flex items-center justify-center pt-1"
-          >
-            <motion.button
-              onClick={() => document.getElementById("terminal")?.scrollIntoView({ behavior: "smooth", block: "center" })}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-tight cursor-pointer border backdrop-blur-sm shadow-lg"
-              style={{
-                color: dm ? "rgba(255,255,255,0.92)" : "#0D1F17",
-                borderColor: dm ? "rgba(255,255,255,0.2)" : "rgba(6,78,59,0.3)",
-                background: dm ? "rgba(6,78,59,0.25)" : "rgba(6,78,59,0.1)",
-              }}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <TerminalIcon className="w-3.5 h-3.5" style={{ color: "#10B981" }} />
-              Open Shell
-            </motion.button>
-          </motion.div>
-
-          {/* ── Orbital Sphere ── */}
-          <motion.div
-            className="pt-5 pb-2"
-            initial={{ opacity: 0, scale: 0.75 }}
-            animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1.0, delay: 3.0, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <OrbitalCore isLoaded={isLoaded} isDarkMode={dm} />
-          </motion.div>
-
-          {/* ── Scroll hint ── */}
-          <motion.div
-            animate={{ y: [0, 7, 0] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-            className="cursor-pointer opacity-25 hover:opacity-55 transition-opacity"
-            onClick={() => document.getElementById("timeline")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            <ChevronDown className={`w-5 h-5 ${textMid}`} />
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* ══════════════════════════════════════════════════════ */}
-      {/*  CONTENT SECTIONS                                     */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <main className="max-w-7xl mx-auto px-4 py-20 space-y-36 relative z-10">
-
-        <section id="about" className="scroll-mt-24">
-          <AboutSection isDarkMode={dm} />
-        </section>
-
-        <section id="timeline" className="scroll-mt-24">
-          <div className="max-w-4xl mx-auto">
-            <Timeline isDarkMode={dm} />
-          </div>
-        </section>
-
-        <section id="projects" className="scroll-mt-24">
-          <ProjectShowcase isDarkMode={dm} />
-        </section>
-
-        <section id="terminal" className="scroll-mt-24">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-5 space-y-5 text-center lg:text-left">
-              <span
-                className="text-[10px] font-mono tracking-widest font-bold uppercase block"
-                style={{ color: "#064E3B" }}
-              >
-                INTERACTIVE DEVELOPER SHELL
-              </span>
-              <h2
-                className="text-3xl md:text-4xl font-display font-extrabold tracking-tight"
-                style={{ color: dm ? "#ffffff" : "#0D1F17" }}
-              >
-                Developer{" "}
-                <span
-                  className="italic font-serif font-normal text-transparent bg-clip-text"
-                  style={{ backgroundImage: `linear-gradient(to right, ${E.glow}, ${E.mid})` }}
-                >
-                  Console
-                </span>
-              </h2>
-              <p className={`text-sm leading-relaxed ${textDim}`}>
-                Navigate my technical history, project documentation, and professional certifications directly through my custom CLI. Type <strong>help</strong> to view commands.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                <div className="flex items-center gap-2">
-                  <Cpu className="w-4 h-4" style={{ color: E.bright }} />
-                  <span className={`text-xs font-semibold ${textMid}`}>Skills & Stack</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4" style={{ color: E.bright }} />
-                  <span className={`text-xs font-semibold ${textMid}`}>Live Contact Info</span>
-                </div>
-              </div>
-            </div>
-            <div className="lg:col-span-7">
-              <Terminal isDarkMode={dm} />
-            </div>
-          </div>
-        </section>
-
-        <section id="contact" className="scroll-mt-24">
-          <div className="max-w-3xl mx-auto">
-            <ContactCard isDarkMode={dm} />
-          </div>
-        </section>
+      <main className="relative z-20 w-full h-full">
+        <SectionScroller
+          sections={sections}
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          isLoaded={isLoaded}
+          isDarkMode={dm}
+        />
       </main>
-
-      {/* ══════════════════════════════════════════════════════ */}
-      {/*  FOOTER                                               */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <footer
-        className="py-12 px-4 backdrop-blur-sm"
-        style={{
-          borderTop: `1px solid ${dm ? "rgba(255,255,255,0.04)" : "rgba(6,78,59,0.12)"}`,
-          background: dm ? "rgba(0,0,0,0.25)" : "rgba(248,231,201,0.60)",
-        }}
-      >
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2.5">
-            <div className="relative w-5 h-5">
-              <div
-                className="absolute w-4 h-4 rounded-full"
-                style={{ background: E.ink, boxShadow: `0 0 8px rgba(16,185,129,0.40)` }}
-              />
-              <div
-                className="absolute w-4 h-4 rounded-full translate-x-[5px]"
-                style={{ background: dm ? "rgba(82,82,82,0.70)" : "rgba(180,155,120,0.60)" }}
-              />
-            </div>
-            <span
-              className="text-xs font-display font-bold tracking-widest uppercase ml-2"
-              style={{ color: dm ? "rgba(255,255,255,0.25)" : "rgba(13,31,23,0.35)" }}
-            >
-              DHANUSH
-            </span>
-          </div>
-          <div className="text-center sm:text-right">
-            <p
-              className="text-[10px] font-mono uppercase tracking-widest font-bold"
-              style={{ color: dm ? "rgba(255,255,255,0.18)" : "rgba(13,31,23,0.28)" }}
-            >
-              © 2026 DHANUSH CODES. ALL RIGHTS RESERVED.
-            </p>
-            <p
-              className="text-[9px] font-mono mt-1 uppercase tracking-wider"
-              style={{ color: dm ? "rgba(255,255,255,0.10)" : "rgba(13,31,23,0.18)" }}
-            >
-              CRAFTED WITH REACT, TAILWIND CSS &amp; MOTION
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
