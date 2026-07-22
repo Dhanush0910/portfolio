@@ -1,7 +1,10 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { Project } from "../types";
-import { Github, ExternalLink, Filter, Layers, X, Cpu, Server, Monitor } from "lucide-react";
+import { Github, ExternalLink, Filter, Layers, X, Cpu, Server, Monitor, Bot } from "lucide-react";
+import chatbotImg from "../assets/chatbot_project.png";
+import ntalentImg from "../assets/ntalent_project.png";
+import incidentImg from "../assets/incident_project.png";
 
 interface ProjectShowcaseProps {
   isDarkMode: boolean;
@@ -9,76 +12,59 @@ interface ProjectShowcaseProps {
 
 const projects: Project[] = [
   {
-    id: "mobile-app-dev",
-    title: "Mobile App Development",
-    subtitle: "High-Performance Cross-Platform Clients",
-    desc: "Building robust, native-speed iOS & Android systems using React Native, Kotlin, Swift, and real-time offline-first caching schemas.",
-    longDesc: "Architecting zero-latency mobile solutions configured with local secure SQL databases, background synchronization routines, and biometric gatekeepers. Every interface is meticulously compiled for responsive performance, rendering complex state animations fluidly at a solid 120Hz.",
-    tags: ["React Native", "Swift", "Kotlin", "SQLite", "Framer Motion", "Tailwind CSS"],
-    category: "Mobile",
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
+    id: "ntalent-ats",
+    title: "NTalent – AI-Powered ATS Resume Matcher",
+    subtitle: "Automated Talent Screening with Gemini API",
+    desc: "An AI-powered ATS resume matcher integrating the Gemini API to automate resume parsing, job-description analysis, skill matching, gap analysis, and candidate ranking.",
+    longDesc: "Engineered an AI-powered ATS (Applicant Tracking System) resume matcher in Python, integrating the Gemini API and designing RESTful APIs to automate resume parsing and job-description analysis. Implemented AI-driven skill matching, gap analysis, and candidate ranking workflows, automating recruiter screening processes and improving workflow efficiency within an agile development environment at Natobotics Technologies.",
+    tags: ["Python", "Gemini API", "Flask", "REST APIs", "NLP", "Agile"],
+    category: "AI",
+    image: ntalentImg,
     features: [
-      "Offline-first data replication",
-      "High-security local biometrics",
-      "Dynamic thread offloading for animations",
-      "Sub-20ms event bridge pipelines"
+      "AI-driven resume parsing",
+      "Skill gap analysis engine",
+      "Candidate ranking & scoring",
+      "Job-description keyword matching"
     ],
-    metrics: ["120Hz Fluid Native Frames", "99.9% Crash-Free Session SLA", "4.8/5 Apple App Store Rating"]
+    metrics: ["Automated Screening", "Gemini API Integration", "Recruiter Efficiency"]
   },
   {
-    id: "web-app-dev",
-    title: "Web Development",
-    subtitle: "Low-Latency Distributed API & Frontends",
-    desc: "Engineering scalable web apps, high-throughput microservice controllers, cluster databases, and custom rendering engines.",
-    longDesc: "Specialized in microservice clusters distributing heavy concurrent load. By combining edge proxies with lazy-initialized database links and custom caching modules, web gateways deliver reliable, low-overhead operations under massive traffic spikes.",
-    tags: ["Next.js", "Node.js", "TypeScript", "PostgreSQL", "Redis", "GraphQL", "Docker"],
+    id: "ai-incident-detection",
+    title: "AI-Powered Incident Detection System",
+    subtitle: "Intelligent Log Analysis & Anomaly Detection",
+    desc: "An AI-assisted incident monitoring platform using Python and Flask to analyse application logs, detect anomalies, and classify potential system issues in real time.",
+    longDesc: "Developed an AI-assisted incident monitoring platform using Python and Flask to analyse application logs, detect anomalies, and classify potential system issues. Implemented REST APIs and database workflows to store incident records, automate analysis, and provide real-time status insights through a React.js dashboard. Integrated the Gemini API for intelligent log classification and root-cause suggestions.",
+    tags: ["Python", "Flask", "React.js", "MySQL", "Gemini API", "REST APIs"],
+    category: "AI",
+    image: incidentImg,
+    features: [
+      "Real-time log anomaly detection",
+      "AI-driven incident classification",
+      "REST API-driven incident storage",
+      "React.js live status dashboard"
+    ],
+    metrics: ["Automated Analysis", "Real-time Alerts", "AI Classification"]
+  },
+  {
+    id: "warehouse-chatbot",
+    title: "Warehouse Management Chatbot",
+    subtitle: "Conversational Inventory Control Interface",
+    desc: "A full-stack warehouse management chatbot with a React.js frontend and Node.js backend, enabling inventory management, stock tracking, and warehouse queries through a conversational interface.",
+    longDesc: "Built a full-stack warehouse management chatbot with a React.js frontend and Node.js backend, enabling inventory management, stock tracking, and warehouse queries through a conversational interface. Implemented REST API communication between frontend and backend to support real-time inventory operations and stock updates. The chatbot allows warehouse staff to query stock levels, update records, and receive alerts via natural language.",
+    tags: ["React.js", "Node.js", "REST APIs", "JavaScript", "TypeScript"],
     category: "Web",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+    image: chatbotImg,
     features: [
-      "High-concurrency cluster scheduling",
-      "Sub-40ms server lookup latency",
-      "Robust type-safe RPC controllers",
-      "Horizontal auto-scaling pod orchestration"
+      "Conversational inventory queries",
+      "Real-time stock tracking",
+      "REST API frontend-backend bridge",
+      "Automated stock update workflows"
     ],
-    metrics: ["40M+ API Invocations/Day", "99.99% Core Service Uptime", "<35ms Edge Proxy Latency"]
+    metrics: ["Real-time Inventory", "Conversational UI", "REST API Integration"]
   },
-  {
-    id: "ui-ux-design",
-    title: "UI/UX Design & Systems",
-    subtitle: "Fluid Micro-Interactions & Modern Aesthetic Guidelines",
-    desc: "Designing comprehensive design systems, interactive prototypes, dark/light modes, and intuitive user experiences.",
-    longDesc: "Creating responsive design systems tailored for web3, fintech, and developer platforms. Focused on high visual impact, accessible color contrast ratios, spring physics motion specs, and modular UI component libraries.",
-    tags: ["Figma", "Design Systems", "UI Animation", "Prototyping", "Design Tokens", "Accessibility"],
-    category: "Design",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
-    features: [
-      "Modular design token architecture",
-      "Dark & light palette adaptation",
-      "Physics-based spring motion guidelines",
-      "WCAG 2.1 AA contrast compliance"
-    ],
-    metrics: ["100+ Reusable UI Components", "4x Faster Design-to-Dev Handoff", "Zero Component Regression"]
-  },
-  {
-    id: "digital-marketing",
-    title: "Digital Marketing & Growth",
-    subtitle: "Data-Driven Audience Acquisition & SEO",
-    desc: "Optimizing Web Vitals, organic search indexing, social campaigns, and funnel analytics to drive high-converting traffic.",
-    longDesc: "Deploying technical SEO setups, automated analytics telemetry, and campaign performance dashboards. Combining page speed optimization with viral messaging structures to amplify brand authority and acquisition pipelines.",
-    tags: ["Technical SEO", "Core Web Vitals", "Analytics", "Conversion Funnels", "Growth Hacking"],
-    category: "Marketing",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    features: [
-      "Core Web Vitals 99+ score tuning",
-      "Automated conversion attribution telemetry",
-      "Dynamic programmatic meta tag generator",
-      "Real-time analytics event tracking"
-    ],
-    metrics: ["3.4x Organic Traffic Growth", "99+ Lighthouse Performance Score", "42% Boost in Conversion Rate"]
-  }
 ];
 
-const categories = ["All", "Mobile", "Web", "Design", "Marketing"];
+const categories = ["All", "AI", "Web"];
 
 export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -90,14 +76,16 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
 
   const getCategoryIcon = (cat: string) => {
     switch (cat) {
-      case "Mobile":
-        return <Layers className="w-3.5 h-3.5" />;
+      case "AI":
+        return <Bot className="w-3.5 h-3.5" />;
       case "Web":
         return <Monitor className="w-3.5 h-3.5" />;
+      case "Mobile":
+        return <Layers className="w-3.5 h-3.5" />;
+      case "Backend":
+        return <Server className="w-3.5 h-3.5" />;
       case "Design":
         return <Cpu className="w-3.5 h-3.5" />;
-      case "Marketing":
-        return <Server className="w-3.5 h-3.5" />;
       default:
         return <Filter className="w-3.5 h-3.5" />;
     }
@@ -114,19 +102,19 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
             className="text-3xl md:text-4xl font-display font-extrabold tracking-tight"
             style={{ color: dm ? "#ffffff" : "#0D1F17" }}
           >
-            Our Core{" "}
+            Featured{" "}
             <span
               className="italic font-serif font-normal text-transparent bg-clip-text"
               style={{ backgroundImage: "linear-gradient(to right, #064E3B, #059669)" }}
             >
-              Disciplines
+              Projects
             </span>
           </h2>
           <p
             className="text-sm mt-1"
             style={{ color: dm ? "rgba(255,255,255,0.40)" : "rgba(13,31,23,0.55)" }}
           >
-            Architecting next-generation digital experiences across major design and development verticals.
+            AI-powered applications and full-stack systems built to solve real-world problems.
           </p>
         </div>
 
@@ -146,12 +134,8 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                 onClick={() => setSelectedCategory(cat)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all cursor-pointer"
                 style={{
-                  backgroundColor: isActive
-                    ? "#064E3B"
-                    : "transparent",
-                  color: isActive
-                    ? "#ffffff"
-                    : (dm ? "rgba(255,255,255,0.50)" : "rgba(13,31,23,0.65)"),
+                  backgroundColor: isActive ? "#064E3B" : "transparent",
+                  color: isActive ? "#ffffff" : (dm ? "rgba(255,255,255,0.50)" : "rgba(13,31,23,0.65)"),
                   boxShadow: isActive ? "0 4px 12px rgba(6,78,59,0.3)" : "none",
                 }}
               >
@@ -268,11 +252,11 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                       {project.tags.slice(0, 4).map((tag, tIdx) => (
                         <span
                           key={tIdx}
-                          className="text-[9px] font-mono px-2 py-0.5 rounded border"
+                          className="text-[9px] font-mono px-2 py-0.5 rounded border font-semibold"
                           style={{
-                            backgroundColor: dm ? "rgba(255,255,255,0.02)" : "rgba(6,78,59,0.04)",
-                            borderColor: dm ? "rgba(255,255,255,0.04)" : "rgba(6,78,59,0.08)",
-                            color: dm ? "rgba(255,255,255,0.45)" : "rgba(6,78,59,0.65)",
+                            backgroundColor: dm ? "rgba(6,78,59,0.35)" : "rgba(6,78,59,0.06)",
+                            borderColor: dm ? "rgba(52,211,153,0.35)" : "rgba(6,78,59,0.12)",
+                            color: dm ? "#34D399" : "#064E3B",
                           }}
                         >
                           {tag}
@@ -280,8 +264,8 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                       ))}
                       {project.tags.length > 4 && (
                         <span
-                          className="text-[9px] font-mono px-1.5 py-0.5"
-                          style={{ color: dm ? "rgba(255,255,255,0.3)" : "rgba(13,31,23,0.4)" }}
+                          className="text-[9px] font-mono px-1.5 py-0.5 font-semibold"
+                          style={{ color: dm ? "rgba(52,211,153,0.7)" : "rgba(13,31,23,0.5)" }}
                         >
                           +{project.tags.length - 4} more
                         </span>
@@ -302,7 +286,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                   
                   <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/60 hover:bg-black/80 text-white text-[10px] font-bold tracking-wider uppercase border border-white/10 backdrop-blur-sm transition-colors">
                     <ExternalLink className="w-3 h-3" />
-                    Inspect Stack
+                    View Details
                   </div>
                 </div>
               </div>
@@ -367,7 +351,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
               <div className="p-6 overflow-y-auto space-y-6">
                 <div>
                   <h4 className="text-xs font-mono tracking-widest font-bold uppercase mb-2" style={{ color: "#064E3B" }}>
-                    ARCHITECTURAL DETAILS
+                    PROJECT OVERVIEW
                   </h4>
                   <p className="text-sm leading-relaxed" style={{ color: dm ? "rgba(255,255,255,0.75)" : "rgba(13,31,23,0.80)" }}>
                     {activeProject.longDesc}
@@ -378,7 +362,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <h4 className="text-xs font-mono tracking-widest font-bold uppercase mb-2" style={{ color: "#064E3B" }}>
-                      CORE CAPABILITIES
+                      KEY FEATURES
                     </h4>
                     <ul className="space-y-1.5">
                       {activeProject.features.map((feature, fIdx) => (
@@ -392,7 +376,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
 
                   <div>
                     <h4 className="text-xs font-mono tracking-widest font-bold uppercase mb-2" style={{ color: "#064E3B" }}>
-                      ENGINEERING OUTCOMES
+                      HIGHLIGHTS
                     </h4>
                     <ul className="space-y-1.5">
                       {activeProject.metrics.map((metric, mIdx) => (
@@ -408,16 +392,16 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                 {/* Tags assembly */}
                 <div className="border-t border-dashed pt-5 flex flex-wrap items-center gap-1.5" style={{ borderColor: "rgba(6,78,59,0.2)" }}>
                   <span className="text-[10px] font-mono tracking-widest font-bold uppercase mr-1" style={{ color: dm ? "rgba(255,255,255,0.4)" : "rgba(13,31,23,0.5)" }}>
-                    ASSEMBLY STACK:
+                    TECH STACK:
                   </span>
                   {activeProject.tags.map((t, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] font-mono px-2.5 py-0.5 rounded-md border"
+                      className="text-[10px] font-mono px-2.5 py-0.5 rounded-md border font-semibold"
                       style={{
-                        backgroundColor: dm ? "rgba(255,255,255,0.03)" : "rgba(6,78,59,0.06)",
-                        borderColor: dm ? "rgba(255,255,255,0.06)" : "rgba(6,78,59,0.12)",
-                        color: dm ? "rgba(255,255,255,0.7)" : "rgba(6,78,59,0.85)",
+                        backgroundColor: dm ? "rgba(6,78,59,0.35)" : "rgba(6,78,59,0.06)",
+                        borderColor: dm ? "rgba(52,211,153,0.35)" : "rgba(6,78,59,0.12)",
+                        color: dm ? "#34D399" : "#064E3B",
                       }}
                     >
                       {t}
@@ -442,7 +426,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                   Close
                 </button>
                 <a
-                  href="https://github.com/dhanush102003"
+                  href="https://github.com/Dhanush0910"
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-2 px-4 py-2 rounded-xl text-white text-xs font-semibold shadow-lg transition-all"
@@ -452,7 +436,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                   }}
                 >
                   <Github className="w-4 h-4" />
-                  Codebase
+                  GitHub
                 </a>
               </div>
             </motion.div>

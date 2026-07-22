@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, Sparkles, Sun, Moon } from "lucide-react";
 
 interface HeaderProps {
@@ -11,26 +11,51 @@ interface HeaderProps {
 
 const menuItems = [
   { label: "Core",       id: "hero" },
+  { label: "About",      id: "about" },
   { label: "Experience", id: "timeline" },
-  { label: "Creations",  id: "projects" },
+  { label: "Projects",   id: "projects" },
   { label: "Console",    id: "terminal" },
   { label: "Contact",    id: "contact" },
 ];
 
 export default function Header({ activeSection, setActiveSection, isDarkMode, onToggleTheme }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dm = isDarkMode;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleScrollTo = (id: string) => {
     setActiveSection(id);
     setMobileMenuOpen(false);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
     <motion.header
-      className="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 pointer-events-none"
+      className={`fixed top-0 left-0 right-0 z-50 w-full px-6 transition-all duration-300 ${
+        scrolled ? "pt-3.5 pb-7 sm:pb-8 backdrop-blur-xl" : "py-3.5"
+      }`}
+      style={{
+        background: scrolled
+          ? (dm
+              ? "linear-gradient(to bottom, rgba(2, 13, 10, 0.96) 0%, rgba(2, 13, 10, 0.75) 55%, rgba(2, 13, 10, 0) 100%)"
+              : "linear-gradient(to bottom, rgba(248, 231, 201, 0.98) 0%, rgba(248, 231, 201, 0.75) 55%, rgba(248, 231, 201, 0) 100%)")
+          : "transparent",
+        WebkitMaskImage: scrolled
+          ? "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%)"
+          : "none",
+        maskImage: scrolled
+          ? "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%)"
+          : "none",
+      }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}

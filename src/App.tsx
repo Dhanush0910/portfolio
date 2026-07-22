@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
-import { ChevronDown, ArrowRight, Cpu, ShieldCheck, Terminal as TerminalIcon } from "lucide-react";
+import { ChevronDown, Cpu, ShieldCheck, Terminal as TerminalIcon } from "lucide-react";
 
 // Components
 import Header from "./components/Header";
@@ -8,6 +8,7 @@ import SlatBackground from "./components/SlatBackground";
 import HUDNodes from "./components/HUDNodes";
 import OrbitalCore from "./components/OrbitalCore";
 import Ferrofluid from "./components/Ferrofluid";
+import AboutSection from "./components/AboutSection";
 import Timeline from "./components/Timeline";
 import ProjectShowcase from "./components/ProjectShowcase";
 import Terminal from "./components/Terminal";
@@ -15,27 +16,27 @@ import ContactCard from "./components/ContactCard";
 
 // ── Emerald palette constants ──
 const E = {
-  ink:    "#064E3B",
-  mid:    "#043C2A",
+  ink: "#064E3B",
+  mid: "#043C2A",
   bright: "#064E3B",
-  glow:   "#055A44",
+  glow: "#055A44",
 };
 
 export default function App() {
-  const [activeSection, setActiveSection]     = useState("hero");
+  const [activeSection, setActiveSection] = useState("hero");
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const [isLoaded, setIsLoaded]               = useState(false);
-  const [isDarkMode, setIsDarkMode]           = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const heroRef = useRef<HTMLElement>(null);
 
   /* ─── Preloader ─── */
   useEffect(() => {
     const startTime = Date.now();
-    const duration  = 1800;
+    const duration = 1800;
     const interval = setInterval(() => {
-      const elapsed  = Date.now() - startTime;
-      const eased    = 1 - Math.pow(1 - Math.min(elapsed / duration, 1), 3);
+      const elapsed = Date.now() - startTime;
+      const eased = 1 - Math.pow(1 - Math.min(elapsed / duration, 1), 3);
       const progress = Math.min(Math.floor(eased * 100), 100);
       setLoadingProgress(progress);
       if (progress >= 100) {
@@ -49,7 +50,7 @@ export default function App() {
   /* ─── Active section tracking ─── */
   useEffect(() => {
     const onScroll = () => {
-      const sections = ["hero", "timeline", "projects", "terminal", "contact"];
+      const sections = ["hero", "about", "timeline", "projects", "terminal", "contact"];
       const sp = window.scrollY + window.innerHeight / 3;
       for (const s of sections) {
         const el = document.getElementById(s);
@@ -65,8 +66,8 @@ export default function App() {
 
   /* ─── Scroll transforms ─── */
   const { scrollY } = useScroll();
-  const heroY        = useTransform(scrollY, [0, 600], [0, -70]);
-  const heroOpacity  = useTransform(scrollY, [0, 380], [1, 0]);
+  const heroY = useTransform(scrollY, [0, 600], [0, -70]);
+  const heroOpacity = useTransform(scrollY, [0, 380], [1, 0]);
   const ferroOpacity = useTransform(
     scrollY,
     [0, typeof window !== "undefined" ? window.innerHeight * 0.75 : 700],
@@ -74,8 +75,8 @@ export default function App() {
   );
 
   /* ─── Hero headline ─── */
-  const line1 = "Meet! Dhanush";
-  const line2 = "Fullstack Engineer.";
+  const line1 = "Hey, I'm Dhanush";
+  const line2 = "Full-Stack Developer.";
 
   const getStatus = (p: number) => {
     if (p < 25) return "INITIALIZING SECURE NODES...";
@@ -87,10 +88,10 @@ export default function App() {
 
   /* ─── Theme helpers ─── */
   const dm = isDarkMode;
-  const bg       = dm ? "#020D0A" : "#F8E7C9";
+  const bg = dm ? "#020D0A" : "#F8E7C9";
   const textMain = dm ? "text-white" : "text-[#0D1F17]";
-  const textMid  = dm ? "text-white/50" : "text-[#0D1F17]/55";
-  const textDim  = dm ? "text-white/38" : "text-[#0D1F17]/45";
+  const textMid = dm ? "text-white/50" : "text-[#0D1F17]/55";
+  const textDim = dm ? "text-white/38" : "text-[#0D1F17]/45";
 
   return (
     <div
@@ -226,7 +227,7 @@ export default function App() {
         className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden"
         style={{ y: heroY, opacity: heroOpacity }}
       >
-        <div className="max-w-3xl mx-auto text-center space-y-7 relative z-20 flex flex-col items-center pt-20">
+        <div className="max-w-3xl mx-auto text-center space-y-7 relative z-20 flex flex-col items-center pt-28 sm:pt-32 pb-12">
 
           {/* ── Badge pills ── */}
           <motion.div
@@ -242,7 +243,7 @@ export default function App() {
                 boxShadow: `0 0 12px rgba(6,78,59,0.35)`,
               }}
             >
-              20+ Years of Industry Craft
+              Open to Work
             </span>
             <span
               className="text-[11px] font-mono px-2.5 py-1 rounded-full border"
@@ -252,7 +253,7 @@ export default function App() {
                 background: dm ? "rgba(255,255,255,0.025)" : "rgba(6,78,59,0.05)",
               }}
             >
-              Principal Architect
+              Full-Stack Developer
             </span>
           </motion.div>
 
@@ -260,8 +261,8 @@ export default function App() {
           <div className="space-y-0.5 text-center">
             {[line1, line2].map((line, lineIdx) => {
               const prevLength = [line1, line2].slice(0, lineIdx).join("").length;
-              const baseDelay  = [1.5, 1.8][lineIdx];
-              const charDelay  = [0.028, 0.022][lineIdx];
+              const baseDelay = [1.5, 1.8][lineIdx];
+              const charDelay = [0.028, 0.022][lineIdx];
               return (
                 <div key={lineIdx} className="overflow-hidden py-1">
                   <div
@@ -304,45 +305,30 @@ export default function App() {
             transition={{ duration: 0.7, delay: 2.5, ease: "easeOut" }}
             className={`text-[14px] sm:text-[15px] font-light max-w-md mx-auto leading-relaxed tracking-wide ${textDim}`}
           >
-            Building secure, high-concurrency enterprise ecosystems with distributed
-            systems, serverless architectures, and web-scale APIs.
+            Building AI-powered applications and full-stack web systems with Python, React.js, Flask,
+            and Node.js — from REST APIs to intelligent automation workflows.
           </motion.p>
 
-          {/* ── CTA Buttons ── */}
+          {/* ── CTA Button ── */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, delay: 2.75 }}
-            className="flex items-center gap-3 pt-1 flex-wrap justify-center"
+            className="flex items-center justify-center pt-1"
           >
             <motion.button
-              onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" })}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-tight cursor-pointer"
-              style={{
-                background: dm ? "rgba(255,255,255,0.92)" : "#0D1F17",
-                color: dm ? "#020D0A" : "#F8E7C9",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-              }}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              Inspect Creations
-              <ArrowRight className="w-3.5 h-3.5" />
-            </motion.button>
-
-            <motion.button
               onClick={() => document.getElementById("terminal")?.scrollIntoView({ behavior: "smooth", block: "center" })}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-tight cursor-pointer border backdrop-blur-sm"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-tight cursor-pointer border backdrop-blur-sm shadow-lg"
               style={{
-                color: dm ? "rgba(255,255,255,0.65)" : "rgba(6,78,59,0.80)",
-                borderColor: dm ? "rgba(255,255,255,0.11)" : "rgba(6,78,59,0.18)",
-                background: dm ? "rgba(255,255,255,0.04)" : "rgba(6,78,59,0.06)",
+                color: dm ? "rgba(255,255,255,0.92)" : "#0D1F17",
+                borderColor: dm ? "rgba(255,255,255,0.2)" : "rgba(6,78,59,0.3)",
+                background: dm ? "rgba(6,78,59,0.25)" : "rgba(6,78,59,0.1)",
               }}
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
             >
-              <TerminalIcon className="w-3.5 h-3.5" />
-              Interactive Shell
+              <TerminalIcon className="w-3.5 h-3.5" style={{ color: "#10B981" }} />
+              Open Shell
             </motion.button>
           </motion.div>
 
@@ -373,6 +359,10 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════ */}
       <main className="max-w-7xl mx-auto px-4 py-20 space-y-36 relative z-10">
 
+        <section id="about" className="scroll-mt-24">
+          <AboutSection isDarkMode={dm} />
+        </section>
+
         <section id="timeline" className="scroll-mt-24">
           <div className="max-w-4xl mx-auto">
             <Timeline isDarkMode={dm} />
@@ -390,7 +380,7 @@ export default function App() {
                 className="text-[10px] font-mono tracking-widest font-bold uppercase block"
                 style={{ color: "#064E3B" }}
               >
-                DEVELOPER SHELL CONTROL
+                INTERACTIVE DEVELOPER SHELL
               </span>
               <h2
                 className="text-3xl md:text-4xl font-display font-extrabold tracking-tight"
@@ -401,21 +391,20 @@ export default function App() {
                   className="italic font-serif font-normal text-transparent bg-clip-text"
                   style={{ backgroundImage: `linear-gradient(to right, ${E.glow}, ${E.mid})` }}
                 >
-                  Playground
+                  Console
                 </span>
               </h2>
               <p className={`text-sm leading-relaxed ${textDim}`}>
-                Interact directly with my stack records, microservices catalog, or query routing
-                coordinates. Fully coded client-side using responsive state machine controllers.
+                Navigate my technical history, project documentation, and professional certifications directly through my custom CLI. Type <strong>help</strong> to view commands.
               </p>
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
                 <div className="flex items-center gap-2">
                   <Cpu className="w-4 h-4" style={{ color: E.bright }} />
-                  <span className={`text-xs font-semibold ${textMid}`}>Fast Telemetries</span>
+                  <span className={`text-xs font-semibold ${textMid}`}>Skills & Stack</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4" style={{ color: E.bright }} />
-                  <span className={`text-xs font-semibold ${textMid}`}>Input Sanitized</span>
+                  <span className={`text-xs font-semibold ${textMid}`}>Live Contact Info</span>
                 </div>
               </div>
             </div>

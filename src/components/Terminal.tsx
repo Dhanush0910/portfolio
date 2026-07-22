@@ -17,19 +17,21 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       command: "system-init",
       output: (
         <div className="space-y-1">
-          <p className="font-bold" style={{ color: "#064E3B" }}>DHANUSH SHELL CORE [v4.2.0]</p>
-          <p className="opacity-60">Initializing 20-year full-stack environment...</p>
+          <p className="font-bold" style={{ color: "#064E3B" }}>DHANUSH SHELL CORE [v2.0.0]</p>
+          <p className="opacity-60">Initializing full-stack developer environment...</p>
           <p className="opacity-80">Type <span style={{ color: "#064E3B" }}>help</span> to explore console systems, or click the quick-run pills below.</p>
         </div>
       )
     }
   ]);
 
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
   }, [logs]);
 
   const handleCommand = (rawCommand: string) => {
@@ -42,10 +44,11 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       case "help":
         output = (
           <div className="grid grid-cols-2 gap-2 text-xs py-1">
-            <p><span className="font-semibold" style={{ color: "#064E3B" }}>about</span> — Bio summary &amp; craft details</p>
-            <p><span className="font-semibold" style={{ color: "#064E3B" }}>skills</span> — Visual ratings on major stacks</p>
-            <p><span className="font-semibold" style={{ color: "#064E3B" }}>projects</span> — Active micro-service listings</p>
-            <p><span className="font-semibold" style={{ color: "#064E3B" }}>contact</span> — Coordinate access links</p>
+            <p><span className="font-semibold" style={{ color: "#064E3B" }}>about</span> — Bio summary &amp; skills</p>
+            <p><span className="font-semibold" style={{ color: "#064E3B" }}>skills</span> — Tech stack proficiency</p>
+            <p><span className="font-semibold" style={{ color: "#064E3B" }}>projects</span> — Featured project listings</p>
+            <p><span className="font-semibold" style={{ color: "#064E3B" }}>contact</span> — Contact &amp; social links</p>
+            <p><span className="font-semibold" style={{ color: "#064E3B" }}>certs</span> — Certifications earned</p>
             <p><span className="font-semibold" style={{ color: "#064E3B" }}>clear</span> — Wipe command prompt logs</p>
           </div>
         );
@@ -54,7 +57,7 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       case "about":
         output = (
           <p className="leading-relaxed">
-            I am Dhanush, a Principal Architect &amp; Fullstack Craftsman with 20 years of real-world production experience. Specialized in structuring high-performance distributed microservices, rendering engines, and accessible design systems. My ethos lies in executing rigid architectural consistency with visually rich pixel control.
+            I'm Dhanush T, a Software Developer from Chennai, India. I specialize in building AI-powered applications and full-stack web systems using Python, React.js, Flask, and Node.js. Skilled in REST API-driven apps, database-integrated solutions, and AI-assisted workflows with the Gemini API. Currently seeking full-stack or Python developer roles.
           </p>
         );
         break;
@@ -63,10 +66,12 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
         output = (
           <div className="space-y-2 py-1">
             {[
-              { name: "TypeScript / Fullstack Architecture", level: 98 },
-              { name: "React Native & Mobile Systems", level: 94 },
-              { name: "Distributed Microservices & Serverless", level: 96 },
-              { name: "UI/UX & Modern Motion Specs", level: 92 },
+              { name: "Python / Flask / REST APIs", level: 90 },
+              { name: "React.js / JavaScript / TypeScript", level: 88 },
+              { name: "AI Integration (Gemini API)", level: 85 },
+              { name: "MySQL / PostgreSQL", level: 82 },
+              { name: "Node.js / Backend Systems", level: 80 },
+              { name: "Git / Docker / CI-CD", level: 78 },
             ].map((s, i) => (
               <div key={i} className="space-y-0.5">
                 <div className="flex justify-between text-[11px]">
@@ -85,10 +90,20 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       case "projects":
         output = (
           <div className="space-y-1 py-1">
-            <p><span style={{ color: "#064E3B" }}>1. Mobile App Development</span> — Native iOS &amp; Android Apps</p>
-            <p><span style={{ color: "#064E3B" }}>2. Web Development</span> — High-Throughput APIs &amp; Frontends</p>
-            <p><span style={{ color: "#064E3B" }}>3. UI/UX Design</span> — Fluid Micro-Interactions &amp; Design Systems</p>
-            <p><span style={{ color: "#064E3B" }}>4. Digital Marketing</span> — SEO &amp; Data Telemetry</p>
+            <p><span style={{ color: "#064E3B" }}>1. NTalent – ATS Resume Matcher</span> — Python, Gemini API, Flask</p>
+            <p><span style={{ color: "#064E3B" }}>2. AI Incident Detection System</span> — Python, Flask, React.js, MySQL</p>
+            <p><span style={{ color: "#064E3B" }}>3. Warehouse Management Chatbot</span> — React.js, Node.js, REST APIs</p>
+          </div>
+        );
+        break;
+
+      case "certs":
+        output = (
+          <div className="space-y-1 py-1">
+            <p><span style={{ color: "#064E3B" }}>✓</span> Certified Software Developer – Python, IOPPC (Mar 2025)</p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> Full-Stack Web Development, Coursera (Jan 2025)</p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> AWS Academy Cloud Foundations, AWS (Sep 2024)</p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> JavaScript &amp; React.js Essential Training, LinkedIn (May 2024)</p>
           </div>
         );
         break;
@@ -96,9 +111,11 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       case "contact":
         output = (
           <div className="space-y-1 py-1">
-            <p>GitHub: <a href="https://github.com/dhanush102003" target="_blank" rel="noreferrer" className="underline" style={{ color: "#064E3B" }}>github.com/dhanush102003</a></p>
-            <p>Email: <span style={{ color: "#064E3B" }}>dhanush@portfolio.dev</span></p>
-            <p>Status: Available for Architecture &amp; Lead Roles</p>
+            <p>GitHub: <a href="https://github.com/Dhanush0910" target="_blank" rel="noreferrer" className="underline" style={{ color: "#064E3B" }}>github.com/Dhanush0910</a></p>
+            <p>LinkedIn: <a href="https://linkedin.com/in/dhanush-t" target="_blank" rel="noreferrer" className="underline" style={{ color: "#064E3B" }}>linkedin.com/in/dhanush-t</a></p>
+            <p>Email: <span style={{ color: "#064E3B" }}>dhanush102003@gmail.com</span></p>
+            <p>Phone: <span style={{ color: "#064E3B" }}>+91 6385457021</span></p>
+            <p>Status: <span style={{ color: "#064E3B" }}>Open to Full-Stack &amp; Python Developer roles</span></p>
           </div>
         );
         break;
@@ -159,7 +176,11 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       </div>
 
       {/* Screen logs area */}
-      <div className="flex-1 p-5 overflow-y-auto space-y-4">
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 p-5 overflow-y-auto space-y-4 cursor-text"
+        onClick={() => inputRef.current?.focus()}
+      >
         {logs.map((log, idx) => (
           <div key={idx} className="space-y-1">
             {log.command !== "system-init" && (
@@ -173,7 +194,6 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
             </div>
           </div>
         ))}
-        <div ref={bottomRef} />
       </div>
 
       {/* Quick click command pills */}
@@ -187,7 +207,7 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
         <span className="text-[10px] font-semibold uppercase mr-1 flex items-center gap-1" style={{ color: dm ? "rgba(255,255,255,0.35)" : "rgba(13,31,23,0.45)" }}>
           <Play className="w-2.5 h-2.5" /> Quick Execute:
         </span>
-        {["about", "skills", "projects", "contact", "clear"].map(cmd => (
+        {["about", "skills", "projects", "certs", "contact", "clear"].map(cmd => (
           <button
             key={cmd}
             onClick={() => handleQuickRun(cmd)}
