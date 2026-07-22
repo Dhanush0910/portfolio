@@ -12,7 +12,7 @@ export default function AboutSection({ isDarkMode }: AboutSectionProps) {
     {
       icon: <Briefcase className="w-4 h-4 text-[#064E3B]" />,
       title: "Current Role",
-      value: "Python Developer",
+      value: "Software Developer",
       sub: "Natobotics Technologies, Chennai",
     },
     {
@@ -90,7 +90,7 @@ export default function AboutSection({ isDarkMode }: AboutSectionProps) {
             <div className="h-px w-full" style={{ background: dm ? "rgba(255,255,255,0.06)" : "rgba(6,78,59,0.12)" }} />
 
             <p className="text-sm leading-relaxed" style={{ color: dm ? "rgba(255,255,255,0.85)" : "rgba(13,31,23,0.85)" }}>
-              I'm Dhanush T, a Software Developer from Chennai, India. I specialize in building AI-powered applications and full-stack web systems using Python, React.js, Flask, and Node.js. Skilled in REST API-driven apps, database-integrated solutions, and AI-assisted workflows with the Gemini API. Currently seeking full-stack or Python developer roles.
+              I'm Dhanush T, a Software Developer from Chennai, India. I specialize in building AI-powered applications and full-stack web systems using Python, React.js, Flask, and Node.js. Skilled in REST API-driven apps, database-integrated solutions, and AI-assisted workflows with the Gemini API. Currently seeking full-stack, software developer or Python developer roles.
             </p>
           </div>
 

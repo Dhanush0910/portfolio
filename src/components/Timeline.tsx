@@ -13,7 +13,7 @@ const experiences: Experience[] = [
   {
     year: "Dec 2025 — PRESENT",
     company: "Natobotics Technologies, Chennai",
-    role: "Python Developer",
+    role: "Software Developer",
     desc: "Engineered an AI-powered ATS resume matcher (NTalent) in Python, integrating the Gemini API and designing RESTful APIs to automate resume parsing and job-description analysis. Implemented AI-driven skill matching, gap analysis, and candidate ranking workflows within an agile development environment.",
     tags: ["Python", "Gemini API", "REST APIs", "Flask", "AI/ML", "Agile"],
     duration: "Present",

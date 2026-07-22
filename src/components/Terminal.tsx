@@ -57,7 +57,7 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       case "about":
         output = (
           <p className="leading-relaxed">
-            I'm Dhanush T, a Software Developer from Chennai, India. I specialize in building AI-powered applications and full-stack web systems using Python, React.js, Flask, and Node.js. Skilled in REST API-driven apps, database-integrated solutions, and AI-assisted workflows with the Gemini API. Currently seeking full-stack or Python developer roles.
+            I'm Dhanush T, a Software Developer from Chennai, India. I specialize in building AI-powered applications and full-stack web systems using Python, React.js, Flask, and Node.js. Skilled in REST API-driven apps, database-integrated solutions, and AI-assisted workflows with the Gemini API. Currently seeking full-stack, software or Python developer roles.
           </p>
         );
         break;
@@ -115,7 +115,7 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
             <p>LinkedIn: <a href="https://linkedin.com/in/dhanush-t" target="_blank" rel="noreferrer" className="underline" style={{ color: "#064E3B" }}>linkedin.com/in/dhanush-t</a></p>
             <p>Email: <span style={{ color: "#064E3B" }}>dhanush102003@gmail.com</span></p>
             <p>Phone: <span style={{ color: "#064E3B" }}>+91 6385457021</span></p>
-            <p>Status: <span style={{ color: "#064E3B" }}>Open to Full-Stack &amp; Python Developer roles</span></p>
+            <p>Status: <span style={{ color: "#064E3B" }}>Open to Full-Stack, Software &amp; Python Developer roles</span></p>
           </div>
         );
         break;
