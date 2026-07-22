@@ -1,7 +1,9 @@
-import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { Project } from "../types";
-import { Github, ExternalLink, Filter, Layers, X, Cpu, Server, Monitor, Bot } from "lucide-react";
+import {
+  Github, ExternalLink, Filter, Layers, X, Cpu, Server, Monitor, Bot,
+} from "lucide-react";
 import chatbotImg from "../assets/chatbot_project.png";
 import ntalentImg from "../assets/ntalent_project.png";
 import incidentImg from "../assets/incident_project.png";
@@ -20,13 +22,8 @@ const projects: Project[] = [
     tags: ["Python", "Gemini API", "Flask", "REST APIs", "NLP", "Agile"],
     category: "AI",
     image: ntalentImg,
-    features: [
-      "AI-driven resume parsing",
-      "Skill gap analysis engine",
-      "Candidate ranking & scoring",
-      "Job-description keyword matching"
-    ],
-    metrics: ["Automated Screening", "Gemini API Integration", "Recruiter Efficiency"]
+    features: ["AI-driven resume parsing", "Skill gap analysis engine", "Candidate ranking & scoring", "Job-description keyword matching"],
+    metrics: ["Automated Screening", "Gemini API Integration", "Recruiter Efficiency"],
   },
   {
     id: "ai-incident-detection",
@@ -37,30 +34,20 @@ const projects: Project[] = [
     tags: ["Python", "Flask", "React.js", "MySQL", "Gemini API", "REST APIs"],
     category: "AI",
     image: incidentImg,
-    features: [
-      "Real-time log anomaly detection",
-      "AI-driven incident classification",
-      "REST API-driven incident storage",
-      "React.js live status dashboard"
-    ],
-    metrics: ["Automated Analysis", "Real-time Alerts", "AI Classification"]
+    features: ["Real-time log anomaly detection", "AI-driven incident classification", "REST API-driven incident storage", "React.js live status dashboard"],
+    metrics: ["Automated Analysis", "Real-time Alerts", "AI Classification"],
   },
   {
     id: "warehouse-chatbot",
     title: "Warehouse Management Chatbot",
     subtitle: "Conversational Inventory Control Interface",
     desc: "A full-stack warehouse management chatbot with a React.js frontend and Node.js backend, enabling inventory management, stock tracking, and warehouse queries through a conversational interface.",
-    longDesc: "Built a full-stack warehouse management chatbot with a React.js frontend and Node.js backend, enabling inventory management, stock tracking, and warehouse queries through a conversational interface. Implemented REST API communication between frontend and backend to support real-time inventory operations and stock updates. The chatbot allows warehouse staff to query stock levels, update records, and receive alerts via natural language.",
+    longDesc: "Built a full-stack warehouse management chatbot with a React.js frontend and Node.js backend, enabling inventory management, stock tracking, and warehouse queries through a conversational interface. Implemented REST API communication between frontend and backend to support real-time inventory operations and stock updates.",
     tags: ["React.js", "Node.js", "REST APIs", "JavaScript", "TypeScript"],
     category: "Web",
     image: chatbotImg,
-    features: [
-      "Conversational inventory queries",
-      "Real-time stock tracking",
-      "REST API frontend-backend bridge",
-      "Automated stock update workflows"
-    ],
-    metrics: ["Real-time Inventory", "Conversational UI", "REST API Integration"]
+    features: ["Conversational inventory queries", "Real-time stock tracking", "REST API frontend-backend bridge", "Automated stock update workflows"],
+    metrics: ["Real-time Inventory", "Conversational UI", "REST API Integration"],
   },
 ];
 
@@ -76,18 +63,12 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
 
   const getCategoryIcon = (cat: string) => {
     switch (cat) {
-      case "AI":
-        return <Bot className="w-3.5 h-3.5" />;
-      case "Web":
-        return <Monitor className="w-3.5 h-3.5" />;
-      case "Mobile":
-        return <Layers className="w-3.5 h-3.5" />;
-      case "Backend":
-        return <Server className="w-3.5 h-3.5" />;
-      case "Design":
-        return <Cpu className="w-3.5 h-3.5" />;
-      default:
-        return <Filter className="w-3.5 h-3.5" />;
+      case "AI":      return <Bot     className="w-3.5 h-3.5" />;
+      case "Web":     return <Monitor className="w-3.5 h-3.5" />;
+      case "Mobile":  return <Layers  className="w-3.5 h-3.5" />;
+      case "Backend": return <Server  className="w-3.5 h-3.5" />;
+      case "Design":  return <Cpu    className="w-3.5 h-3.5" />;
+      default:        return <Filter  className="w-3.5 h-3.5" />;
     }
   };
 
@@ -95,8 +76,8 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
 
   return (
     <div className="w-full">
-      {/* Filters */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+      {/* ── Section Header & Filter Tabs ── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-16">
         <div>
           <h2
             className="text-3xl md:text-4xl font-display font-extrabold tracking-tight"
@@ -110,10 +91,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
               Projects
             </span>
           </h2>
-          <p
-            className="text-sm mt-1"
-            style={{ color: dm ? "rgba(255,255,255,0.40)" : "rgba(13,31,23,0.55)" }}
-          >
+          <p className="text-sm mt-1" style={{ color: dm ? "rgba(255,255,255,0.40)" : "rgba(13,31,23,0.55)" }}>
             AI-powered applications and full-stack systems built to solve real-world problems.
           </p>
         </div>
@@ -147,152 +125,164 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
         </div>
       </div>
 
-      {/* Stacking Cards */}
-      <div className="flex flex-col gap-12 sm:gap-16 max-w-4xl mx-auto py-8">
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="sticky w-full origin-top"
+      {/* ── STICKY CARD STACK CONTAINER ──
+          `pb-[70vh]` gives the parent container enough bottom height so Card 3
+          pins on top of Card 2 & Card 1, holds the 3-card stack pinned on screen,
+          and then all 3 cards scroll up together as normal scroll continues.
+      ── */}
+      <div className="relative max-w-4xl mx-auto pb-[70vh]">
+        {filteredProjects.map((project, index) => (
+          <motion.div
+            key={project.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="sticky w-full origin-top mb-[40vh] last:mb-0"
+            style={{
+              top: `${100 + index * 28}px`,
+              zIndex: (index + 1) * 10,
+            }}
+          >
+            {/* ─ Outer Card Container with glassmorphism & shadow depth ─ */}
+            <div
+              onClick={() => setActiveProject(project)}
+              className="group relative rounded-3xl border p-6 sm:p-8 cursor-pointer flex flex-col md:flex-row gap-6 items-stretch shadow-2xl transition-all duration-500 overflow-hidden backdrop-blur-xl"
               style={{
-                top: `${110 + index * 24}px`,
-                zIndex: (index + 1) * 10,
+                backgroundColor: dm
+                  ? "rgba(4,25,18,0.96)"
+                  : "rgba(255,250,240,0.98)",
+                borderColor: dm
+                  ? "rgba(255,255,255,0.09)"
+                  : "rgba(6,78,59,0.16)",
+                boxShadow: dm
+                  ? `0 ${30 + index * 5}px ${60 + index * 10}px -15px rgba(0,0,0,0.92), 0 0 0 1px rgba(6,78,59,0.2)`
+                  : `0 ${24 + index * 4}px ${48 + index * 8}px -15px rgba(6,78,59,0.18), 0 0 0 1px rgba(6,78,59,0.1)`,
               }}
             >
+              {/* Glowing emerald backdrop inside card */}
               <div
-                onClick={() => setActiveProject(project)}
-                className="group relative rounded-3xl border p-6 sm:p-8 cursor-pointer flex flex-col md:flex-row gap-6 items-stretch shadow-2xl transition-all duration-500 overflow-hidden backdrop-blur-md"
+                className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity duration-700"
+                style={{ background: "#064E3B" }}
+              />
+
+              {/* Number Badge Pill on top-left of card */}
+              <div
+                className="absolute top-4 left-6 flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-mono font-extrabold tracking-widest uppercase select-none z-20 shadow-md"
                 style={{
-                  backgroundColor: dm
-                    ? "rgba(4,25,18,0.92)"
-                    : "rgba(255,250,240,0.95)",
-                  borderColor: dm
-                    ? "rgba(255,255,255,0.08)"
-                    : "rgba(6,78,59,0.14)",
-                  boxShadow: dm
-                    ? "0 20px 40px -15px rgba(0,0,0,0.8)"
-                    : "0 20px 40px -15px rgba(6,78,59,0.12)",
+                  background: "linear-gradient(90deg, #064E3B, #059669)",
+                  color: "#ffffff",
                 }}
               >
-                {/* Glowing emerald backdrop inside card */}
-                <div
-                  className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-20 group-hover:opacity-35 transition-opacity duration-700"
-                  style={{ background: "#064E3B" }}
-                />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                PROJECT 0{index + 1} / 0{filteredProjects.length}
+              </div>
 
-                {/* Card Left: Content Details */}
-                <div className="flex-1 flex flex-col justify-between space-y-6 relative z-10">
-                  <div className="space-y-4">
-                    {/* Top Row */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-mono font-bold tracking-wider" style={{ color: "#064E3B" }}>
-                        0{index + 1}
-                      </span>
-                      <span
-                        className="text-[9px] font-mono tracking-widest font-extrabold uppercase px-2.5 py-1 rounded-full border"
-                        style={{
-                          backgroundColor: "rgba(6,78,59,0.10)",
-                          color: "#064E3B",
-                          borderColor: "rgba(6,78,59,0.25)",
-                        }}
-                      >
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Title & Subtitle */}
-                    <div className="space-y-1">
-                      <h3
-                        className="text-2xl sm:text-3xl font-display font-extrabold tracking-tight group-hover:text-[#064E3B] transition-colors"
-                        style={{ color: dm ? "#ffffff" : "#0D1F17" }}
-                      >
-                        {project.title}
-                      </h3>
-                      <p
-                        className="text-xs font-bold tracking-wide"
-                        style={{ color: dm ? "rgba(255,255,255,0.40)" : "rgba(6,78,59,0.70)" }}
-                      >
-                        {project.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Description */}
-                    <p
-                      className="text-xs sm:text-sm leading-relaxed line-clamp-3"
-                      style={{ color: dm ? "rgba(255,255,255,0.50)" : "rgba(13,31,23,0.65)" }}
+              {/* Card Left: Content Details */}
+              <div className="flex-1 flex flex-col justify-between space-y-6 relative z-10 pt-7">
+                <div className="space-y-4">
+                  {/* Category Tag */}
+                  <div>
+                    <span
+                      className="text-[9px] font-mono tracking-widest font-extrabold uppercase px-2.5 py-1 rounded-full border inline-block"
+                      style={{
+                        backgroundColor: "rgba(6,78,59,0.10)",
+                        color: "#064E3B",
+                        borderColor: "rgba(6,78,59,0.25)",
+                      }}
                     >
-                      {project.desc}
+                      {project.category}
+                    </span>
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <div className="space-y-1">
+                    <h3
+                      className="text-2xl sm:text-3xl font-display font-extrabold tracking-tight group-hover:text-[#064E3B] transition-colors duration-300"
+                      style={{ color: dm ? "#ffffff" : "#0D1F17" }}
+                    >
+                      {project.title}
+                    </h3>
+                    <p
+                      className="text-xs font-bold tracking-wide"
+                      style={{ color: dm ? "rgba(255,255,255,0.40)" : "rgba(6,78,59,0.70)" }}
+                    >
+                      {project.subtitle}
                     </p>
                   </div>
 
-                  {/* Tags & Metric Highlights */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {project.metrics.slice(0, 1).map((met, mIdx) => (
-                        <div
-                          key={mIdx}
-                          className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border"
-                          style={{
-                            backgroundColor: dm ? "rgba(255,255,255,0.03)" : "rgba(6,78,59,0.06)",
-                            borderColor: dm ? "rgba(255,255,255,0.06)" : "rgba(6,78,59,0.12)",
-                            color: dm ? "rgba(255,255,255,0.8)" : "rgba(13,31,23,0.85)",
-                          }}
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#064E3B" }} />
-                          {met}
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.tags.slice(0, 4).map((tag, tIdx) => (
-                        <span
-                          key={tIdx}
-                          className="text-[9px] font-mono px-2 py-0.5 rounded border font-semibold"
-                          style={{
-                            backgroundColor: dm ? "rgba(6,78,59,0.35)" : "rgba(6,78,59,0.06)",
-                            borderColor: dm ? "rgba(52,211,153,0.35)" : "rgba(6,78,59,0.12)",
-                            color: dm ? "#34D399" : "#064E3B",
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {project.tags.length > 4 && (
-                        <span
-                          className="text-[9px] font-mono px-1.5 py-0.5 font-semibold"
-                          style={{ color: dm ? "rgba(52,211,153,0.7)" : "rgba(13,31,23,0.5)" }}
-                        >
-                          +{project.tags.length - 4} more
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                  {/* Description */}
+                  <p
+                    className="text-xs sm:text-sm leading-relaxed line-clamp-3"
+                    style={{ color: dm ? "rgba(255,255,255,0.50)" : "rgba(13,31,23,0.65)" }}
+                  >
+                    {project.desc}
+                  </p>
                 </div>
 
-                {/* Card Right: Image */}
-                <div className="w-full md:w-[320px] lg:w-[360px] h-[200px] md:h-auto min-h-[180px] relative rounded-2xl overflow-hidden shadow-inner flex-shrink-0 z-10 self-stretch">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                  <motion.img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                  
-                  <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/60 hover:bg-black/80 text-white text-[10px] font-bold tracking-wider uppercase border border-white/10 backdrop-blur-sm transition-colors">
-                    <ExternalLink className="w-3 h-3" />
-                    View Details
+                {/* Tags & Metric Highlights */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {project.metrics.slice(0, 1).map((met, mIdx) => (
+                      <div
+                        key={mIdx}
+                        className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border"
+                        style={{
+                          backgroundColor: dm ? "rgba(255,255,255,0.03)" : "rgba(6,78,59,0.06)",
+                          borderColor: dm ? "rgba(255,255,255,0.06)" : "rgba(6,78,59,0.12)",
+                          color: dm ? "rgba(255,255,255,0.8)" : "rgba(13,31,23,0.85)",
+                        }}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#064E3B" }} />
+                        {met}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tags.slice(0, 4).map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="text-[9px] font-mono px-2 py-0.5 rounded border font-semibold"
+                        style={{
+                          backgroundColor: dm ? "rgba(6,78,59,0.35)" : "rgba(6,78,59,0.06)",
+                          borderColor: dm ? "rgba(52,211,153,0.35)" : "rgba(6,78,59,0.12)",
+                          color: dm ? "#34D399" : "#064E3B",
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                    {project.tags.length > 4 && (
+                      <span
+                        className="text-[9px] font-mono px-1.5 py-0.5 font-semibold"
+                        style={{ color: dm ? "rgba(52,211,153,0.7)" : "rgba(13,31,23,0.5)" }}
+                      >
+                        +{project.tags.length - 4} more
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+
+              {/* Card Right: Image */}
+              <div className="w-full md:w-[320px] lg:w-[360px] h-[200px] md:h-auto min-h-[180px] relative rounded-2xl overflow-hidden shadow-inner flex-shrink-0 z-10 self-stretch">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+
+                <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/60 hover:bg-black/80 text-white text-[10px] font-bold tracking-wider uppercase border border-white/10 backdrop-blur-sm transition-colors">
+                  <ExternalLink className="w-3 h-3" />
+                  View Details
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
 
       {/* Modal */}

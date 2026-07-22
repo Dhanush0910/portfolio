@@ -95,7 +95,7 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen relative font-sans overflow-x-hidden"
+      className="min-h-screen relative font-sans overflow-x-clip"
       style={{
         background: bg,
         color: dm ? "#fff" : "#0D1F17",
