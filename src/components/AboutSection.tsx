@@ -67,7 +67,7 @@ export default function AboutSection({ isDarkMode }: AboutSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="lg:col-span-7 rounded-2xl border p-6 md:p-8 flex flex-col justify-between backdrop-blur-md shadow-xl relative overflow-hidden"
+          className="lg:col-span-7 rounded-2xl border p-6 md:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden"
           style={{
             backgroundColor: dm ? "rgba(4,25,18,0.92)" : "rgba(255,250,240,0.95)",
             borderColor: dm ? "rgba(255,255,255,0.08)" : "rgba(6,78,59,0.15)",
@@ -121,9 +121,9 @@ export default function AboutSection({ isDarkMode }: AboutSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="p-4 rounded-2xl border backdrop-blur-md flex items-start gap-3.5 transition-all hover:-translate-y-0.5"
+              className="p-4 rounded-2xl border flex items-start gap-3.5 transition-all hover:-translate-y-0.5"
               style={{
-                backgroundColor: dm ? "rgba(4,25,18,0.75)" : "rgba(255,250,240,0.85)",
+                backgroundColor: dm ? "rgba(4,25,18,0.92)" : "rgba(255,250,240,0.95)",
                 borderColor: dm ? "rgba(255,255,255,0.06)" : "rgba(6,78,59,0.12)",
               }}
             >

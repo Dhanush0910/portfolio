@@ -27,7 +27,7 @@ export default function Header({ activeSection, setActiveSection, isDarkMode, on
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -39,19 +39,19 @@ export default function Header({ activeSection, setActiveSection, isDarkMode, on
   return (
     <motion.header
       className={`fixed top-0 left-0 right-0 z-50 w-full px-6 transition-all duration-300 ${
-        scrolled ? "pt-3.5 pb-7 sm:pb-8 backdrop-blur-xl" : "py-3.5"
+        scrolled ? "pt-3.5 pb-7 sm:pb-8" : "py-3.5"
       }`}
       style={{
         background: scrolled
           ? (dm
-              ? "linear-gradient(to bottom, rgba(2, 13, 10, 0.96) 0%, rgba(2, 13, 10, 0.75) 55%, rgba(2, 13, 10, 0) 100%)"
-              : "linear-gradient(to bottom, rgba(248, 231, 201, 0.98) 0%, rgba(248, 231, 201, 0.75) 55%, rgba(248, 231, 201, 0) 100%)")
+              ? "linear-gradient(to bottom, rgba(2, 13, 10, 0.98) 0%, rgba(2, 13, 10, 0.90) 65%, rgba(2, 13, 10, 0) 100%)"
+              : "linear-gradient(to bottom, rgba(248, 231, 201, 0.99) 0%, rgba(248, 231, 201, 0.90) 65%, rgba(248, 231, 201, 0) 100%)")
           : "transparent",
         WebkitMaskImage: scrolled
-          ? "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%)"
+          ? "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 100%)"
           : "none",
         maskImage: scrolled
-          ? "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%)"
+          ? "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 100%)"
           : "none",
       }}
       initial={{ opacity: 0, y: -20 }}
@@ -88,10 +88,10 @@ export default function Header({ activeSection, setActiveSection, isDarkMode, on
 
         {/* ── Central nav capsule ── */}
         <nav
-          className="hidden md:flex items-center gap-0.5 px-3 py-1.5 rounded-full border backdrop-blur-xl"
+          className="hidden md:flex items-center gap-0.5 px-3 py-1.5 rounded-full border"
           style={{
             borderColor: dm ? "rgba(255,255,255,0.06)" : "rgba(6,78,59,0.12)",
-            background: dm ? "rgba(0,0,0,0.30)" : "rgba(248,231,201,0.70)",
+            background: dm ? "rgba(0,0,0,0.55)" : "rgba(248,231,201,0.90)",
           }}
         >
           {menuItems.map((item) => {
@@ -136,10 +136,10 @@ export default function Header({ activeSection, setActiveSection, isDarkMode, on
           <motion.button
             onClick={onToggleTheme}
             id="theme-toggle"
-            className="flex items-center justify-center w-9 h-9 rounded-full border cursor-pointer backdrop-blur-sm transition-colors duration-300"
+            className="flex items-center justify-center w-9 h-9 rounded-full border cursor-pointer transition-colors duration-300"
             style={{
               borderColor: dm ? "rgba(255,255,255,0.10)" : "rgba(6,78,59,0.18)",
-              background: dm ? "rgba(255,255,255,0.05)" : "rgba(6,78,59,0.07)",
+              background: dm ? "rgba(255,255,255,0.10)" : "rgba(6,78,59,0.10)",
               color: dm ? "rgba(255,255,255,0.65)" : "#064E3B",
             }}
             whileHover={{ scale: 1.10 }}
@@ -190,10 +190,10 @@ export default function Header({ activeSection, setActiveSection, isDarkMode, on
           {/* ── Mobile hamburger ── */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl border backdrop-blur-sm"
+            className="md:hidden p-2 rounded-xl border"
             style={{
               borderColor: dm ? "rgba(255,255,255,0.10)" : "rgba(6,78,59,0.15)",
-              background:  dm ? "rgba(0,0,0,0.30)" : "rgba(248,231,201,0.50)",
+              background:  dm ? "rgba(0,0,0,0.55)" : "rgba(248,231,201,0.85)",
               color:       dm ? "#ffffff" : "#0D1F17",
             }}
           >
@@ -210,10 +210,10 @@ export default function Header({ activeSection, setActiveSection, isDarkMode, on
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-20 left-4 right-4 z-50 p-4 rounded-2xl border shadow-2xl pointer-events-auto backdrop-blur-2xl"
+            className="absolute top-20 left-4 right-4 z-50 p-4 rounded-2xl border shadow-2xl pointer-events-auto"
             style={{
               borderColor: dm ? "rgba(255,255,255,0.08)" : "rgba(6,78,59,0.12)",
-              background:  dm ? "rgba(0,0,0,0.90)" : "rgba(248,231,201,0.95)",
+              background:  dm ? "rgba(2,13,10,0.97)" : "rgba(248,231,201,0.98)",
             }}
           >
             <div className="flex flex-col gap-1">

@@ -134,13 +134,11 @@ float vn(vec2 p, float s, float seed) {
 }
 
 float dbn(vec2 p, float s, float seed) {
-  float o = s / 2.0;
+  float o = s * 0.5;
   float n0 = vn(p, s, seed);
   float n1 = vn(p + vec2(o, o), s, seed + 0.1);
   float n2 = vn(p + vec2(-o, o), s, seed + 0.2);
-  float n3 = vn(p + vec2(o, -o), s, seed + 0.3);
-  float n4 = vn(p + vec2(-o, -o), s, seed + 0.4);
-  return (2.0 * n0 + 1.5 * n1 + 1.25 * n2 + 1.125 * n3 + n4) / 7.0;
+  return (2.0 * n0 + 1.5 * n1 + 1.25 * n2) / 4.75;
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
@@ -246,10 +244,16 @@ const Ferrofluid = ({
     const container = containerRef.current;
     if (!container) return;
 
+    const isFirefox = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent);
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const defaultDpr = dpr ?? (
+      isMobile ? 0.45 : isFirefox ? 0.65 : Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 1.0)
+    );
+
     const renderer = new Renderer({
-      dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
+      dpr: defaultDpr,
       alpha: true,
-      antialias: true
+      antialias: !isMobile
     });
     rendererRef.current = renderer;
     const gl = renderer.gl;
@@ -258,6 +262,8 @@ const Ferrofluid = ({
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.style.display = 'block';
+    canvas.style.transform = 'translateZ(0)';
+    canvas.style.willChange = 'transform';
     container.appendChild(canvas);
 
     const { arr, count, avg } = prepColors(colors);
@@ -324,6 +330,7 @@ const Ferrofluid = ({
     }
 
     const loop = (t: number) => {
+      if (paused) return;
       rafRef.current = requestAnimationFrame(loop);
       uniforms.iTime.value = t * 0.001;
       if (mouseDampening > 0) {
@@ -340,7 +347,7 @@ const Ferrofluid = ({
       } else {
         lastTimeRef.current = t;
       }
-      if (!paused && programRef.current && meshRef.current) {
+      if (programRef.current && meshRef.current) {
         try {
           renderer.render({ scene: meshRef.current });
         } catch (e) {
@@ -348,7 +355,9 @@ const Ferrofluid = ({
         }
       }
     };
-    rafRef.current = requestAnimationFrame(loop);
+    if (!paused) {
+      rafRef.current = requestAnimationFrame(loop);
+    }
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);

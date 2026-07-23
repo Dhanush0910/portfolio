@@ -164,7 +164,7 @@ export default function App() {
             >
               <motion.button
                 onClick={() => setActiveSection("terminal")}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-tight cursor-pointer border backdrop-blur-sm shadow-lg"
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[13px] tracking-tight cursor-pointer border shadow-lg"
                 style={{
                   color: dm ? "rgba(255,255,255,0.92)" : "#0D1F17",
                   borderColor: dm ? "rgba(255,255,255,0.2)" : "rgba(6,78,59,0.3)",
@@ -206,7 +206,7 @@ export default function App() {
       label: "About",
       content: (
         <div className="w-full max-w-7xl mx-auto px-4 flex flex-col min-h-full" style={{ paddingTop: "80px" }}>
-          <div className="overflow-y-auto flex-1 pr-1" style={{ maxHeight: "calc(100vh - 90px)" }}>
+          <div className="overflow-y-auto flex-1 pr-1 smooth-scroll gpu-layer" style={{ maxHeight: "calc(100vh - 90px)" }}>
             <div className="py-8">
               <AboutSection isDarkMode={dm} />
             </div>
@@ -219,7 +219,7 @@ export default function App() {
       label: "Experience",
       content: (
         <div className="w-full max-w-4xl mx-auto px-4 flex flex-col min-h-full" style={{ paddingTop: "80px" }}>
-          <div className="overflow-y-auto flex-1 pr-1" style={{ maxHeight: "calc(100vh - 90px)" }}>
+          <div className="overflow-y-auto flex-1 pr-1 smooth-scroll gpu-layer" style={{ maxHeight: "calc(100vh - 90px)" }}>
             <div className="py-8">
               <Timeline isDarkMode={dm} />
             </div>
@@ -232,7 +232,7 @@ export default function App() {
       label: "Projects",
       content: (
         <div className="w-full max-w-7xl mx-auto px-4 py-4 flex flex-col min-h-full" style={{ paddingTop: "80px" }}>
-          <div className="overflow-y-auto flex-1 pr-1" style={{ maxHeight: "calc(100vh - 100px)" }}>
+          <div className="overflow-y-auto flex-1 pr-1 smooth-scroll gpu-layer" style={{ maxHeight: "calc(100vh - 100px)" }}>
             <div className="pb-8">
               <ProjectShowcase isDarkMode={dm} />
             </div>
@@ -290,52 +290,54 @@ export default function App() {
       id: "contact",
       label: "Contact",
       content: (
-        <div className="w-full max-w-4xl mx-auto px-4 py-12 flex flex-col items-center justify-between min-h-screen pt-24">
-          <div className="w-full my-auto">
-            <ContactCard isDarkMode={dm} />
-          </div>
-          <footer
-            className="w-full mb-6 py-6 px-4 rounded-2xl backdrop-blur-sm"
-            style={{
-              borderTop: `1px solid ${dm ? "rgba(255,255,255,0.04)" : "rgba(6,78,59,0.12)"}`,
-              background: dm ? "rgba(0,0,0,0.25)" : "rgba(248,231,201,0.60)",
-            }}
-          >
-            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2.5">
-                <div className="relative w-5 h-5">
-                  <div
-                    className="absolute w-4 h-4 rounded-full"
-                    style={{ background: E.ink, boxShadow: `0 0 8px rgba(16,185,129,0.40)` }}
-                  />
-                  <div
-                    className="absolute w-4 h-4 rounded-full translate-x-[5px]"
-                    style={{ background: dm ? "rgba(82,82,82,0.70)" : "rgba(180,155,120,0.60)" }}
-                  />
+        <div className="w-full max-w-4xl mx-auto px-4 flex flex-col min-h-full" style={{ paddingTop: "80px" }}>
+          <div className="overflow-y-auto flex-1 pr-1 smooth-scroll gpu-layer" style={{ maxHeight: "calc(100vh - 90px)" }}>
+            <div className="py-6 space-y-8 flex flex-col justify-between min-h-full">
+              <ContactCard isDarkMode={dm} />
+              <footer
+                className="w-full py-6 px-4 rounded-2xl"
+                style={{
+                  borderTop: `1px solid ${dm ? "rgba(255,255,255,0.04)" : "rgba(6,78,59,0.12)"}`,
+                  background: dm ? "rgba(0,0,0,0.25)" : "rgba(248,231,201,0.60)",
+                }}
+              >
+                <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative w-5 h-5">
+                      <div
+                        className="absolute w-4 h-4 rounded-full"
+                        style={{ background: E.ink, boxShadow: `0 0 8px rgba(16,185,129,0.40)` }}
+                      />
+                      <div
+                        className="absolute w-4 h-4 rounded-full translate-x-[5px]"
+                        style={{ background: dm ? "rgba(82,82,82,0.70)" : "rgba(180,155,120,0.60)" }}
+                      />
+                    </div>
+                    <span
+                      className="text-xs font-display font-bold tracking-widest uppercase ml-2"
+                      style={{ color: dm ? "rgba(255,255,255,0.25)" : "rgba(13,31,23,0.35)" }}
+                    >
+                      DHANUSH
+                    </span>
+                  </div>
+                  <div className="text-center sm:text-right">
+                    <p
+                      className="text-[10px] font-mono uppercase tracking-widest font-bold"
+                      style={{ color: dm ? "rgba(255,255,255,0.18)" : "rgba(13,31,23,0.28)" }}
+                    >
+                      © 2026 DHANUSH CODES. ALL RIGHTS RESERVED.
+                    </p>
+                    <p
+                      className="text-[9px] font-mono mt-1 uppercase tracking-wider"
+                      style={{ color: dm ? "rgba(255,255,255,0.10)" : "rgba(13,31,23,0.18)" }}
+                    >
+                      CRAFTED WITH REACT, TAILWIND CSS &amp; MOTION
+                    </p>
+                  </div>
                 </div>
-                <span
-                  className="text-xs font-display font-bold tracking-widest uppercase ml-2"
-                  style={{ color: dm ? "rgba(255,255,255,0.25)" : "rgba(13,31,23,0.35)" }}
-                >
-                  DHANUSH
-                </span>
-              </div>
-              <div className="text-center sm:text-right">
-                <p
-                  className="text-[10px] font-mono uppercase tracking-widest font-bold"
-                  style={{ color: dm ? "rgba(255,255,255,0.18)" : "rgba(13,31,23,0.28)" }}
-                >
-                  © 2026 DHANUSH CODES. ALL RIGHTS RESERVED.
-                </p>
-                <p
-                  className="text-[9px] font-mono mt-1 uppercase tracking-wider"
-                  style={{ color: dm ? "rgba(255,255,255,0.10)" : "rgba(13,31,23,0.18)" }}
-                >
-                  CRAFTED WITH REACT, TAILWIND CSS &amp; MOTION
-                </p>
-              </div>
+              </footer>
             </div>
-          </footer>
+          </div>
         </div>
       ),
     },
@@ -424,7 +426,7 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════ */}
       {isLoaded && (
         <motion.div
-          className="fixed inset-0 z-[1] pointer-events-auto transition-opacity duration-700"
+          className="fixed inset-0 z-[1] pointer-events-none transition-opacity duration-700"
           style={{
             opacity: ferroOpacity,
             mixBlendMode: dm ? "screen" : "darken",
@@ -442,7 +444,8 @@ export default function App() {
             glow={dm ? 2.0 : 1.8}
             flowDirection="down"
             opacity={1.0}
-            mouseInteraction={true}
+            paused={ferroOpacity === 0}
+            mouseInteraction={typeof window !== "undefined" && window.innerWidth >= 768}
             mouseStrength={1.2}
             mouseRadius={0.4}
           />

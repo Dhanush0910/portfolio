@@ -20,9 +20,9 @@ export default function OrbitalCore({ isLoaded, isDarkMode = true }: OrbitalCore
         className="absolute w-40 h-40 rounded-full pointer-events-none transition-all duration-500"
         style={{
           background: dm
-            ? "radial-gradient(circle, rgba(16,185,129,0.20) 0%, rgba(6,78,59,0.07) 50%, transparent 75%)"
-            : "radial-gradient(circle, rgba(6,78,59,0.25) 0%, rgba(5,150,105,0.10) 50%, transparent 75%)",
-          filter: "blur(22px)",
+            ? "radial-gradient(circle, rgba(16,185,129,0.22) 0%, rgba(6,78,59,0.10) 40%, rgba(6,78,59,0.02) 65%, transparent 80%)"
+            : "radial-gradient(circle, rgba(6,78,59,0.28) 0%, rgba(5,150,105,0.12) 40%, rgba(5,150,105,0.02) 65%, transparent 80%)",
+          willChange: "transform, opacity",
         }}
         animate={{ scale: [1, 1.2, 1], opacity: [0.55, 0.88, 0.55] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -80,8 +80,8 @@ export default function OrbitalCore({ isLoaded, isDarkMode = true }: OrbitalCore
 
       {/* Rotating thin orbit ring */}
       <motion.div
-        className="absolute w-[132px] h-[132px] rounded-full border border-dashed transition-all duration-500"
-        style={{ borderColor: dm ? "rgba(6,78,59,0.22)" : "rgba(6,78,59,0.35)" }}
+        className="absolute w-[132px] h-[132px] rounded-full border border-dashed transition-all duration-500 gpu-layer"
+        style={{ borderColor: dm ? "rgba(6,78,59,0.22)" : "rgba(6,78,59,0.35)", willChange: "transform" }}
         animate={{ rotate: 360 }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       >
@@ -96,8 +96,8 @@ export default function OrbitalCore({ isLoaded, isDarkMode = true }: OrbitalCore
 
       {/* Small secondary orbit */}
       <motion.div
-        className="absolute w-[158px] h-[158px] rounded-full border transition-all duration-500"
-        style={{ borderColor: dm ? "rgba(255,255,255,0.02)" : "rgba(6,78,59,0.12)" }}
+        className="absolute w-[158px] h-[158px] rounded-full border transition-all duration-500 gpu-layer"
+        style={{ borderColor: dm ? "rgba(255,255,255,0.02)" : "rgba(6,78,59,0.12)", willChange: "transform" }}
         animate={{ rotate: -360 }}
         transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
       >

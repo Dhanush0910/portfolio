@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState, ReactNode } from "react";
 import { Experience } from "../types";
-import { Calendar, Briefcase, TrendingUp, Award, GraduationCap, Trophy } from "lucide-react";
+import { Calendar, Briefcase, TrendingUp, Award, GraduationCap, Trophy, ExternalLink } from "lucide-react";
 
 interface TimelineProps {
   isDarkMode: boolean;
@@ -32,7 +32,7 @@ const education = [
   {
     year: "Jun 2019 — May 2021",
     institution: "Shree Niketan Higher Secondary School",
-    degree: "Higher Secondary Certificate",
+    degree: "Higher Secondary",
     detail: "Percentage: 89%",
     tags: ["Mathematics", "Biology", "Physics"],
   },
@@ -52,10 +52,36 @@ const accomplishments = [
 ];
 
 const certifications = [
-  { name: "Certified Software Developer – Python (Associate Level)", issuer: "IOPPC", date: "Mar 2025" },
-  { name: "The Full-Stack", issuer: "Coursera", date: "Jan 2025" },
-  { name: "AWS Academy Cloud Foundations", issuer: "AWS", date: "Sep 2024" },
-  { name: "JavaScript & React.js Essential Training", issuer: "LinkedIn Learning", date: "May 2024" },
+  {
+    name: "Certified Software Developer – Python (Associate Level)",
+    issuer: "IOPPC",
+    date: "Mar 2025",
+    link: "https://drive.google.com/file/d/1vSqEIv0Ck-350uIZ21ZUrmQkZmKZWRNm/view?usp=sharing",
+  },
+  {
+    name: "The Full-Stack",
+    issuer: "Coursera",
+    date: "Jan 2025",
+    link: "https://drive.google.com/file/d/1Pr6IfGlMM5U6BjDRtSNb8WtOGDwnCPP1/view?usp=sharing",
+  },
+  {
+    name: "AWS Academy Cloud Foundations",
+    issuer: "AWS",
+    date: "Sep 2024",
+    link: "https://drive.google.com/file/d/195fJQnXia-c3TWA1C-zUGx-vkTiAvTbs/view?usp=sharing",
+  },
+  {
+    name: "React.js Essential Training",
+    issuer: "LinkedIn Learning",
+    date: "May 2024",
+    link: "https://drive.google.com/file/d/162Dvv1DjPoCElqL00iGi4XWYhKsVp_uL/view?usp=sharing",
+  },
+  {
+    name: "JavaScript Essential Training",
+    issuer: "LinkedIn Learning",
+    date: "April 2024",
+    link: "https://drive.google.com/file/d/15x32IUE-o8K2AsGH94rXdbX7XK5ZI8fs/view?usp=sharing",
+  },
 ];
 
 export default function Timeline({ isDarkMode }: TimelineProps) {
@@ -95,9 +121,9 @@ export default function Timeline({ isDarkMode }: TimelineProps) {
 
       {/* Tab Switcher with sliding indicator */}
       <div
-        className="flex gap-1 p-1 rounded-xl border backdrop-blur-md mx-auto w-fit"
+        className="flex gap-1 p-1 rounded-xl border mx-auto w-fit"
         style={{
-          backgroundColor: dm ? "rgba(0,0,0,0.40)" : "rgba(248,231,201,0.50)",
+          backgroundColor: dm ? "rgba(0,0,0,0.65)" : "rgba(248,231,201,0.90)",
           borderColor: dm ? "rgba(255,255,255,0.05)" : "rgba(6,78,59,0.12)",
         }}
       >
@@ -180,11 +206,11 @@ export default function Timeline({ isDarkMode }: TimelineProps) {
                     </motion.div>
 
                     <motion.div
-                      className="p-6 rounded-2xl border transition-all duration-500 cursor-pointer backdrop-blur-md"
+                      className="p-6 rounded-2xl border transition-all duration-500 cursor-pointer"
                       style={{
                         backgroundColor: isActive
-                          ? (dm ? "rgba(4,25,18,0.85)" : "rgba(255,250,240,0.95)")
-                          : (dm ? "rgba(2,13,10,0.45)" : "rgba(248,231,201,0.40)"),
+                          ? (dm ? "rgba(4,25,18,0.95)" : "rgba(255,250,240,0.98)")
+                          : (dm ? "rgba(2,13,10,0.75)" : "rgba(248,231,201,0.80)"),
                         borderColor: isActive
                           ? "rgba(6,78,59,0.35)"
                           : (dm ? "rgba(255,255,255,0.05)" : "rgba(6,78,59,0.12)"),
@@ -334,7 +360,7 @@ export default function Timeline({ isDarkMode }: TimelineProps) {
                   </div>
 
                   <motion.div
-                    className="p-6 rounded-2xl border backdrop-blur-md"
+                    className="p-6 rounded-2xl border"
                     style={{
                       backgroundColor: dm ? "rgba(4,25,18,0.85)" : "rgba(255,250,240,0.95)",
                       borderColor: "rgba(6,78,59,0.35)",
@@ -420,7 +446,7 @@ export default function Timeline({ isDarkMode }: TimelineProps) {
                 </div>
 
                 <motion.div
-                  className="p-6 rounded-2xl border backdrop-blur-md"
+                  className="p-6 rounded-2xl border"
                   style={{
                     backgroundColor: dm ? "rgba(4,25,18,0.85)" : "rgba(255,250,240,0.95)",
                     borderColor: "rgba(6,78,59,0.35)",
@@ -437,22 +463,30 @@ export default function Timeline({ isDarkMode }: TimelineProps) {
                   </h3>
                   <div className="space-y-3">
                     {certifications.map((cert, idx) => (
-                      <div
+                      <a
                         key={idx}
-                        className="flex items-start gap-3 p-3 rounded-xl border"
+                        href={cert.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-between p-3 rounded-xl border transition-all duration-300 hover:-translate-y-0.5 hover:border-[#064E3B]/40 hover:shadow-md cursor-pointer group"
                         style={{
                           backgroundColor: dm ? "rgba(6,40,28,0.3)" : "rgba(248,231,201,0.5)",
                           borderColor: dm ? "rgba(255,255,255,0.05)" : "rgba(6,78,59,0.10)",
                         }}
                       >
-                        <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "#064E3B" }} />
-                        <div>
-                          <p className="text-xs font-semibold" style={{ color: dm ? "#ffffff" : "#0D1F17" }}>{cert.name}</p>
-                          <p className="text-[10px] font-mono mt-0.5" style={{ color: dm ? "rgba(255,255,255,0.45)" : "rgba(6,78,59,0.65)" }}>
-                            {cert.issuer} · {cert.date}
-                          </p>
+                        <div className="flex items-start gap-3 min-w-0">
+                          <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "#064E3B" }} />
+                          <div className="min-w-0">
+                            <p className="text-xs font-semibold group-hover:text-[#064E3B] transition-colors" style={{ color: dm ? "#ffffff" : "#0D1F17" }}>
+                              {cert.name}
+                            </p>
+                            <p className="text-[10px] font-mono mt-0.5" style={{ color: dm ? "rgba(255,255,255,0.45)" : "rgba(6,78,59,0.65)" }}>
+                              {cert.issuer} · {cert.date}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                        <ExternalLink className="w-3.5 h-3.5 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all flex-shrink-0 ml-2" style={{ color: "#064E3B" }} />
+                      </a>
                     ))}
                   </div>
                 </motion.div>
@@ -466,7 +500,7 @@ export default function Timeline({ isDarkMode }: TimelineProps) {
               {accomplishments.map((item, index) => (
                 <motion.div
                   key={index}
-                  className="p-6 rounded-2xl border backdrop-blur-md"
+                  className="p-6 rounded-2xl border"
                   style={{
                     backgroundColor: dm ? "rgba(4,25,18,0.85)" : "rgba(255,250,240,0.95)",
                     borderColor: "rgba(6,78,59,0.35)",

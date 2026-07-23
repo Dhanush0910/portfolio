@@ -4,9 +4,9 @@ import { Project } from "../types";
 import {
   Github, ExternalLink, Filter, Layers, X, Cpu, Server, Monitor, Bot,
 } from "lucide-react";
-import chatbotImg from "../assets/chatbot_project.png";
-import ntalentImg from "../assets/ntalent_project.png";
-import incidentImg from "../assets/incident_project.png";
+import chatbotImg from "../assets/chatbot_project.webp";
+import ntalentImg from "../assets/ntalent_project.webp";
+import incidentImg from "../assets/incident_project.webp";
 
 interface ProjectShowcaseProps {
   isDarkMode: boolean;
@@ -63,12 +63,12 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
 
   const getCategoryIcon = (cat: string) => {
     switch (cat) {
-      case "AI":      return <Bot     className="w-3.5 h-3.5" />;
-      case "Web":     return <Monitor className="w-3.5 h-3.5" />;
-      case "Mobile":  return <Layers  className="w-3.5 h-3.5" />;
-      case "Backend": return <Server  className="w-3.5 h-3.5" />;
-      case "Design":  return <Cpu    className="w-3.5 h-3.5" />;
-      default:        return <Filter  className="w-3.5 h-3.5" />;
+      case "AI": return <Bot className="w-3.5 h-3.5" />;
+      case "Web": return <Monitor className="w-3.5 h-3.5" />;
+      case "Mobile": return <Layers className="w-3.5 h-3.5" />;
+      case "Backend": return <Server className="w-3.5 h-3.5" />;
+      case "Design": return <Cpu className="w-3.5 h-3.5" />;
+      default: return <Filter className="w-3.5 h-3.5" />;
     }
   };
 
@@ -98,9 +98,9 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
 
         {/* Category Tabs */}
         <div
-          className="flex flex-wrap gap-1.5 p-1 rounded-xl border backdrop-blur-md"
+          className="flex flex-wrap gap-1.5 p-1 rounded-xl border"
           style={{
-            backgroundColor: dm ? "rgba(0,0,0,0.40)" : "rgba(248,231,201,0.50)",
+            backgroundColor: dm ? "rgba(0,0,0,0.65)" : "rgba(248,231,201,0.90)",
             borderColor: dm ? "rgba(255,255,255,0.05)" : "rgba(6,78,59,0.12)",
           }}
         >
@@ -139,7 +139,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
             {/* ─ Outer Card Container ─ */}
             <div
               onClick={() => setActiveProject(project)}
-              className="group relative rounded-3xl border p-6 sm:p-8 cursor-pointer flex flex-col md:flex-row gap-6 items-stretch shadow-2xl transition-all duration-500 overflow-hidden backdrop-blur-xl hover:scale-[1.01]"
+              className="group relative rounded-3xl border p-6 sm:p-8 cursor-pointer flex flex-col md:flex-row gap-6 items-stretch transition-all duration-300 overflow-hidden hover:scale-[1.01] gpu-layer"
               style={{
                 backgroundColor: dm
                   ? "rgba(4,25,18,0.96)"
@@ -148,14 +148,14 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                   ? "rgba(255,255,255,0.09)"
                   : "rgba(6,78,59,0.16)",
                 boxShadow: dm
-                  ? `0 ${30 + index * 5}px ${60 + index * 10}px -15px rgba(0,0,0,0.92), 0 0 0 1px rgba(6,78,59,0.2)`
-                  : `0 ${24 + index * 4}px ${48 + index * 8}px -15px rgba(6,78,59,0.18), 0 0 0 1px rgba(6,78,59,0.1)`,
+                  ? "0 20px 40px -15px rgba(0,0,0,0.85), 0 0 0 1px rgba(6,78,59,0.2)"
+                  : "0 16px 32px -12px rgba(6,78,59,0.15), 0 0 0 1px rgba(6,78,59,0.1)",
               }}
             >
               {/* Glowing emerald backdrop inside card */}
               <div
-                className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity duration-700"
-                style={{ background: "#064E3B" }}
+                className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full pointer-events-none opacity-25 group-hover:opacity-45 transition-opacity duration-700"
+                style={{ background: "radial-gradient(circle, rgba(6,78,59,0.40) 0%, rgba(6,78,59,0.10) 50%, transparent 75%)" }}
               />
 
               {/* Number Badge Pill on top-left of card */}
@@ -267,7 +267,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
                   loading="lazy"
                 />
 
-                <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/60 hover:bg-black/80 text-white text-[10px] font-bold tracking-wider uppercase border border-white/10 backdrop-blur-sm transition-colors">
+                <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/70 hover:bg-black/85 text-white text-[10px] font-bold tracking-wider uppercase border border-white/10 transition-colors">
                   <ExternalLink className="w-3 h-3" />
                   View Details
                 </div>
@@ -286,7 +286,7 @@ export default function ProjectShowcase({ isDarkMode }: ProjectShowcaseProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveProject(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/85"
             />
 
             <motion.div

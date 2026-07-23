@@ -100,10 +100,11 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
       case "certs":
         output = (
           <div className="space-y-1 py-1">
-            <p><span style={{ color: "#064E3B" }}>✓</span> Certified Software Developer – Python, IOPPC (Mar 2025)</p>
-            <p><span style={{ color: "#064E3B" }}>✓</span> Full-Stack Web Development, Coursera (Jan 2025)</p>
-            <p><span style={{ color: "#064E3B" }}>✓</span> AWS Academy Cloud Foundations, AWS (Sep 2024)</p>
-            <p><span style={{ color: "#064E3B" }}>✓</span> JavaScript &amp; React.js Essential Training, LinkedIn (May 2024)</p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> <a href="https://drive.google.com/file/d/1vSqEIv0Ck-350uIZ21ZUrmQkZmKZWRNm/view?usp=sharing" target="_blank" rel="noreferrer" className="underline hover:opacity-80">Certified Software Developer – Python, IOPPC (Mar 2025)</a></p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> <a href="https://drive.google.com/file/d/1Pr6IfGlMM5U6BjDRtSNb8WtOGDwnCPP1/view?usp=sharing" target="_blank" rel="noreferrer" className="underline hover:opacity-80">The Full-Stack, Coursera (Jan 2025)</a></p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> <a href="https://drive.google.com/file/d/195fJQnXia-c3TWA1C-zUGx-vkTiAvTbs/view?usp=sharing" target="_blank" rel="noreferrer" className="underline hover:opacity-80">AWS Academy Cloud Foundations, AWS (Sep 2024)</a></p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> <a href="https://drive.google.com/file/d/162Dvv1DjPoCElqL00iGi4XWYhKsVp_uL/view?usp=sharing" target="_blank" rel="noreferrer" className="underline hover:opacity-80">React.js Essential Training, LinkedIn (May 2024)</a></p>
+            <p><span style={{ color: "#064E3B" }}>✓</span> <a href="https://drive.google.com/file/d/15x32IUE-o8K2AsGH94rXdbX7XK5ZI8fs/view?usp=sharing" target="_blank" rel="noreferrer" className="underline hover:opacity-80">JavaScript Essential Training, LinkedIn (May 2024)</a></p>
           </div>
         );
         break;
@@ -145,7 +146,7 @@ export default function Terminal({ isDarkMode }: TerminalProps) {
 
   return (
     <div
-      className="rounded-2xl border font-mono text-xs overflow-hidden shadow-2xl flex flex-col h-[400px] backdrop-blur-md transition-all duration-500"
+      className="rounded-2xl border font-mono text-xs overflow-hidden shadow-2xl flex flex-col h-[400px] transition-all duration-500"
       style={{
         backgroundColor: dm ? "rgba(2,13,10,0.92)" : "rgba(255,250,240,0.95)",
         borderColor: dm ? "rgba(255,255,255,0.08)" : "rgba(6,78,59,0.15)",

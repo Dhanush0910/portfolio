@@ -41,7 +41,7 @@ export default function SlatBackground({ isLoaded, isDarkMode }: SlatBackgroundP
   return (
     <div
       className="fixed inset-0 overflow-hidden z-0 pointer-events-none"
-      style={{ transition: "background 0.55s cubic-bezier(0.4,0,0.2,1)" }}
+      style={{ transition: "background 0.55s cubic-bezier(0.4,0,0.2,1)", contain: "paint" }}
     >
       {/* ── Base fill — transitions with theme ── */}
       <div
@@ -75,58 +75,42 @@ export default function SlatBackground({ isLoaded, isDarkMode }: SlatBackgroundP
                 animate={reveal ? { clipPath: "inset(0% 0% 0% 0%)" } : { clipPath: "inset(0% 0% 100% 0%)" }}
                 transition={{ duration: 1.05, delay, ease: [0.76, 0, 0.24, 1] }}
               >
-                {/* Primary glow blob — flows up and down */}
-                <motion.div
-                  className="absolute left-1/2 -translate-x-1/2 w-[220px] h-[360px]"
-                  style={{ top: `${topPct - 12}%` }}
-                  animate={reveal ? {
-                    y: ["-30vh", "30vh"],
-                    scaleY:  [1, 1.14, 0.95, 1],
-                    scaleX:  [1, 1.04, 0.98, 1],
-                    opacity: [alpha * 0.55, alpha * 0.85, alpha * 0.60, alpha * 0.55],
-                  } : {}}
-                  transition={{
-                    y:       { duration: 8 + (i % 3) * 2,   repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: delay * 1.2 },
-                    scaleY:  { duration: 6 + (i % 2) * 1.5, repeat: Infinity, ease: "easeInOut" },
-                    scaleX:  { duration: 5 + (i % 2) * 1.5, repeat: Infinity, ease: "easeInOut" },
-                    opacity: { duration: 8 + (i % 3) * 2,   repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: delay * 1.2 },
+                {/* Primary glow blob — flows up and down with GPU CSS keyframes */}
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 w-[220px] h-[360px] gpu-layer"
+                  style={{
+                    top: `${topPct - 12}%`,
+                    animation: reveal ? `slatFloatPrimary ${8 + (i % 3) * 2}s ease-in-out infinite` : "none",
+                    animationDelay: `${delay * 1.2}s`,
                   }}
                 >
                   <div
                     className="w-full h-full"
                     style={{
-                      background: `radial-gradient(ellipse 58% 78% at 50% 38%, ${glowFn(i, alpha)}, transparent 72%)`,
-                      filter: "blur(40px)",
+                      background: `radial-gradient(ellipse 65% 85% at 50% 38%, ${glowFn(i, alpha)} 0%, ${glowFn(i, alpha * 0.3)} 45%, transparent 75%)`,
                     }}
                   />
-                </motion.div>
+                </div>
 
-                {/* Secondary counter-phase glow */}
+                {/* Secondary counter-phase glow (Desktop only) */}
                 {i >= 2 && i <= 7 && (
-                  <motion.div
-                    className="absolute left-1/2 -translate-x-1/2 w-[160px] h-[200px]"
-                    style={{ top: `${topPct - 24}%` }}
-                    animate={reveal ? {
-                      y: ["28vh", "-28vh"],
-                      opacity: [0.15, 0.35, 0.15],
-                      scaleY:  [0.85, 1.15, 0.85],
-                    } : {}}
-                    transition={{
-                      y:       { duration: 10 + (i % 2) * 2.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: delay + 1.0 },
-                      opacity: { duration: 10 + (i % 2) * 2.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: delay + 1.0 },
-                      scaleY:  { duration: 8  + (i % 2) * 2,   repeat: Infinity, ease: "easeInOut" },
+                  <div
+                    className="hidden md:block absolute left-1/2 -translate-x-1/2 w-[160px] h-[200px] gpu-layer"
+                    style={{
+                      top: `${topPct - 24}%`,
+                      animation: reveal ? `slatFloatSecondary ${10 + (i % 2) * 2.5}s ease-in-out infinite` : "none",
+                      animationDelay: `${delay + 1.0}s`,
                     }}
                   >
                     <div
                       className="w-full h-full"
                       style={{
                         background: dm
-                          ? `radial-gradient(ellipse 48% 68% at 50% 50%, rgba(6,78,59,0.25), transparent 78%)`
-                          : `radial-gradient(ellipse 48% 68% at 50% 50%, rgba(6,78,59,0.30), transparent 78%)`,
-                        filter: "blur(45px)",
+                          ? `radial-gradient(ellipse 55% 75% at 50% 50%, rgba(6,78,59,0.28) 0%, rgba(6,78,59,0.08) 50%, transparent 80%)`
+                          : `radial-gradient(ellipse 55% 75% at 50% 50%, rgba(6,78,59,0.32) 0%, rgba(6,78,59,0.10) 50%, transparent 80%)`,
                       }}
                     />
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Column edge highlight */}
@@ -152,9 +136,8 @@ export default function SlatBackground({ isLoaded, isDarkMode }: SlatBackgroundP
         transition={{ duration: 1.6, delay: 1.0 }}
         style={{
           background: dm
-            ? "radial-gradient(ellipse 78% 58% at 50% 54%, rgba(6,78,59,0.20) 0%, rgba(4,50,35,0.08) 52%, transparent 78%)"
-            : "radial-gradient(ellipse 78% 58% at 50% 54%, rgba(6,78,59,0.18) 0%, rgba(4,50,35,0.06) 52%, transparent 78%)",
-          filter: "blur(50px)",
+            ? "radial-gradient(ellipse 80% 65% at 50% 54%, rgba(6,78,59,0.22) 0%, rgba(4,50,35,0.06) 45%, transparent 75%)"
+            : "radial-gradient(ellipse 80% 65% at 50% 54%, rgba(6,78,59,0.20) 0%, rgba(4,50,35,0.05) 45%, transparent 75%)",
         }}
       />
 

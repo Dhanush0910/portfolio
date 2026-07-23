@@ -62,18 +62,23 @@ export default function SectionScroller({
     [activeIndex, isLoaded, isSettled, sections, setActiveSection]
   );
 
-  // Helper: check if event is inside a scrollable element that has scroll room
+  // Helper: check if event is inside a scrollable element that has scroll room (zero reflow/layout flush)
   const isScrollableChild = (target: HTMLElement | null, deltaY: number): boolean => {
     let el = target;
     while (el && el !== document.body && el !== document.documentElement) {
       const tag = el.tagName?.toLowerCase();
       if (tag === "input" || tag === "textarea") return true;
-      const style = window.getComputedStyle(el);
-      const overflowY = style.overflowY;
-      if ((overflowY === "auto" || overflowY === "scroll") && el.scrollHeight > el.clientHeight) {
+
+      // Fast class-based scroll check without layout thrashing from getComputedStyle
+      const isScrollContainer =
+        el.classList.contains("overflow-y-auto") ||
+        el.classList.contains("overflow-auto") ||
+        el.classList.contains("overflow-y-scroll") ||
+        el.classList.contains("smooth-scroll");
+
+      if (isScrollContainer && el.scrollHeight > el.clientHeight + 2) {
         const atTop = el.scrollTop <= 0;
-        const atBottom = Math.abs(el.scrollHeight - el.clientHeight - el.scrollTop) <= 2;
-        // If child has scroll room in the intended direction, let it scroll naturally
+        const atBottom = Math.abs(el.scrollHeight - el.clientHeight - el.scrollTop) <= 4;
         if (deltaY > 0 && !atBottom) return true;
         if (deltaY < 0 && !atTop) return true;
       }
@@ -91,7 +96,7 @@ export default function SectionScroller({
       // Let inner scrollable containers consume the event first
       if (isScrollableChild(e.target as HTMLElement, e.deltaY)) return;
 
-      if (Math.abs(e.deltaY) > 50) {
+      if (Math.abs(e.deltaY) > 15) {
         e.preventDefault();
         const nextIndex = e.deltaY > 0 ? activeIndex + 1 : activeIndex - 1;
         if (nextIndex >= 0 && nextIndex < sections.length) {
@@ -102,7 +107,7 @@ export default function SectionScroller({
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         wheelLockRef.current = false;
-      }, 800);
+      }, 500);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -112,7 +117,7 @@ export default function SectionScroller({
     };
   }, [activeIndex, isLoaded, isSettled, sections.length, goToSection]);
 
-  // Touch Swipe Handling for Mobile / Tablet
+  // Touch Swipe Handling for Mobile / Tablet (Passive for 60fps mobile scrolling)
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 1) {
@@ -120,14 +125,15 @@ export default function SectionScroller({
       }
     };
 
-    const handleTouchMove = (e: TouchEvent) => {
+    const handleTouchEnd = (e: TouchEvent) => {
       if (touchStartY.current === null || !isLoaded || !isSettled || wheelLockRef.current) return;
-      const diffY = touchStartY.current - (e.touches[0]?.clientY ?? 0);
+      const endY = e.changedTouches[0]?.clientY ?? touchStartY.current;
+      const diffY = touchStartY.current - endY;
+      touchStartY.current = null;
+
       if (isScrollableChild(e.target as HTMLElement, diffY)) return;
 
-      if (Math.abs(diffY) > 40) {
-        e.preventDefault();
-        touchStartY.current = null;
+      if (Math.abs(diffY) > 45) {
         const nextIndex = diffY > 0 ? activeIndex + 1 : activeIndex - 1;
         if (nextIndex >= 0 && nextIndex < sections.length) {
           goToSection(nextIndex);
@@ -136,11 +142,11 @@ export default function SectionScroller({
     };
 
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
       window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [activeIndex, isLoaded, isSettled, sections.length, goToSection]);
 
@@ -169,7 +175,7 @@ export default function SectionScroller({
 
   return (
     <div className="relative w-full h-screen overflow-hidden select-none">
-      {/* Main Section Transition Container (Side dots removed) */}
+      {/* Main Section Transition Container */}
       <AnimatePresence custom={direction} mode="popLayout">
         <motion.section
           key={currentSec.id}
@@ -194,40 +200,80 @@ export default function SectionScroller({
             setIsSettled(true);
             wheelLockRef.current = false;
           }}
-          className="absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden"
+          style={{ willChange: "transform, opacity", transform: "translateZ(0)", backfaceVisibility: "hidden" }}
+          className="absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden gpu-layer"
         >
           {/* Inner Content Wrapper: Push-In & Obscured Hold -> Push-Out Reveal */}
           <motion.div
             initial={{
-              scale: 0.85,
-              filter: "blur(22px)",
-              opacity: 0.2,
+              scale: 0.94,
+              opacity: 0.3,
             }}
             animate={
               isSettled
-                ? { scale: 1, filter: "blur(0px)", opacity: 1 } // Push-Out / Full sharpness reveal
-                : { scale: 0.88, filter: "blur(18px)", opacity: 0.55 } // Obscured hold in transit
+                ? { scale: 1, opacity: 1 } // Push-Out / Full sharpness reveal
+                : { scale: 0.96, opacity: 0.65 } // Obscured hold in transit
             }
             transition={
               isSettled
                 ? {
                     type: "spring",
-                    stiffness: 280,
-                    damping: 26,
-                    mass: 0.6,
+                    stiffness: 300,
+                    damping: 28,
+                    mass: 0.5,
                   }
                 : {
                     duration: 0.15,
                     ease: "easeOut",
                   }
             }
-            style={{ willChange: "transform, filter, opacity" }}
+            style={{ willChange: "transform, opacity", transform: "translateZ(0)", backfaceVisibility: "hidden" }}
             className="w-full h-full flex flex-col justify-center items-center"
           >
             {currentSec.content}
           </motion.div>
         </motion.section>
       </AnimatePresence>
+
+      {/* Side Section Nav Indicator Dots */}
+      <div className="hidden md:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-3">
+        {sections.map((sec, idx) => {
+          const isActive = idx === activeIndex;
+          return (
+            <button
+              key={sec.id}
+              onClick={() => goToSection(idx)}
+              className="group relative flex items-center justify-center p-1.5 cursor-pointer"
+              title={sec.label ?? sec.id}
+            >
+              {/* Hover Tooltip label */}
+              <span
+                className="absolute right-7 px-2.5 py-1 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap border"
+                style={{
+                  background: "rgba(2,13,10,0.95)",
+                  color: "#ffffff",
+                  borderColor: "rgba(16,185,129,0.3)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+                }}
+              >
+                {sec.label ?? sec.id}
+              </span>
+
+              {/* Dot element */}
+              <div
+                className="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                style={{
+                  background: isActive
+                    ? "#10B981"
+                    : "rgba(16,185,129,0.30)",
+                  transform: isActive ? "scale(1.35)" : "scale(1)",
+                  boxShadow: isActive ? "0 0 10px rgba(16,185,129,0.85)" : "none",
+                }}
+              />
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

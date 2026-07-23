@@ -14,19 +14,18 @@
   0%,
   100% {
     opacity: 0.5;
-    transform: scaleY(1) scaleX(1);
-    filter: blur(55px);
+    transform: scaleY(1) scaleX(1) translateZ(0);
   }
 
   50% {
     opacity: 0.88;
-    transform: scaleY(1.12) scaleX(1.05);
-    filter: blur(70px);
+    transform: scaleY(1.12) scaleX(1.05) translateZ(0);
   }
 }
 
 .animate-emerald-pulse {
   animation: emeraldGlowPulse 6s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 /* Column reveal entry animation */
@@ -123,10 +122,31 @@
 /* Base style resets */
 html {
   scroll-behavior: smooth;
+  /* Force GPU layer for the root — avoids implicit repaint promotions */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+body {
+  /* Prevent mobile momentum scroll bouncing that can jank the fixed layout */
+  overscroll-behavior: none;
+}
+
+/* Optimise touch on the app shell – allow vertical swipes for section nav */
+#root {
+  touch-action: pan-y;
+}
+
+/* Custom scrollbars for Firefox & WebKit browsers */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16, 185, 129, 0.45) transparent;
 }
 
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -134,10 +154,54 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.45);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.75);
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU hardware layer promotion utilities */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* GPU-accelerated background slat float keyframes */
+@keyframes slatFloatPrimary {
+  0%, 100% {
+    transform: translate3d(0, -12vh, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(0, 12vh, 0) scale(1.05);
+    opacity: 0.82;
+  }
+}
+
+@keyframes slatFloatSecondary {
+  0%, 100% {
+    transform: translate3d(0, 10vh, 0) scale(0.9);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translate3d(0, -10vh, 0) scale(1.1);
+    opacity: 0.38;
+  }
 }
